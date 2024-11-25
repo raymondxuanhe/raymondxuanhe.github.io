@@ -1,8 +1,8 @@
 ---
-title: "Paper Title Number 4"
+title: "The Effects of Pay Transparency on the U.S. Labor Market"
 collection: publications
 category: wip
-permalink: /publication/2024-02-17-paper-title-number-4
+permalink: /research/pay-transparency
 excerpt: 'This paper is about fixing template issue #693.'
 date: 2024-02-17
 venue: 'GitHub Journal of Bugs'
