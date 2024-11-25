@@ -5,10 +5,10 @@ category: wip
 permalink: /research/sovereign-debt
 excerpt: 'This paper is about the number 2. The number 3 is left for future work.'
 date: 2010-10-01
-venue: 'Journal 1'
+venue: ''
 slidesurl: 'http://academicpages.github.io/files/slides2.pdf'
 paperurl: 'http://academicpages.github.io/files/paper2.pdf'
-citation: 'Your Name, You. (2010). &quot;Paper Title Number 2.&quot; <i>Journal 1</i>. 1(2).'
+citation: 
 ---
 
-The contents above will be part of a list of publications, if the user clicks the link for the publication than the contents of section will be rendered as a full page, allowing you to provide more information about the paper for the reader. When publications are displayed as a single page, the contents of the above "citation" field will automatically be included below this section in a smaller font.
+I jointly examine the currency and maturity composition of sovereign debt among developing countries and show that foreign currency-denominated debt is of significantly longer maturity than sovereign debt denominated in local currency, on average. I develop a quantitative model with endogenous domestic inflation and risk-averse international investors, which generate the conventional hedging benefit-incentive trade-off and risk premium channels. I also uncover a new mechanism of `inflation-smoothing,' which only arises when bond maturity and currency are studied simultaneously. While my model predicts that local currency debt has shorter maturity, it also finds that foreign currency debt should mostly be short-term as well.
