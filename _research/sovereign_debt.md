@@ -4,9 +4,9 @@ collection: research
 category: wip
 permalink: /research/sovereign-debt
 excerpt: 
-date: 2010-10-01
+date: 
 venue: 
-slidesurl: 'http://academicpages.github.io/files/slides2.pdf'
+slidesurl: 
 paperurl: 'http://academicpages.github.io/files/paper2.pdf'
 citation:
 ---
