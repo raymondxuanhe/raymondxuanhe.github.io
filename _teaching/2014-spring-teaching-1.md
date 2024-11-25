@@ -1,14 +1,16 @@
 ---
 title: "ECO387C - Macroeconomics 1"
-collection: teaching
+collection: Teaching Assistant
 type: "Ph.D. core course"
-permalink: /teaching/2014-spring-teaching-1
+permalink: /teaching/eco387c
 venue: "University of Texas at Austin, Department of Economics"
 date: Fall 2022, Fall 2023, Fall 2024
-location: "City, Country"
+location: ""
 ---
 
-This is a description of a teaching experience. You can use markdown like any other post.
+Fall 2022, Fall 2023, Fall 2024
+
+Lead bi-weekly discussion sections, wrote problem sets and problem set solutions, and held office hours.
 
 Heading 1
 ======
