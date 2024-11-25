@@ -2,7 +2,7 @@
 title: "Noisy Wage Posting"
 collection: research
 category: wip
-permalink: /publication/2015-10-01-paper-title-number-3
+permalink: /research/wage-posting
 excerpt: 'This paper is about the number 3. The number 4 is left for future work.'
 date: 2015-10-01
 venue: 'Journal 1'
