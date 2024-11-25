@@ -3,8 +3,8 @@ title: "The Currency-Maturity Composition of Sovereign Debt"
 collection: research
 category: wip
 permalink: /research/sovereign-debt
-excerpt: 
-date: 
+excerpt: ''
+date: 2024-10-13
 venue: 
 slidesurl: 
 paperurl: 'http://academicpages.github.io/files/paper2.pdf'
