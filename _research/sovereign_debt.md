@@ -4,7 +4,7 @@ collection: research
 category: wip
 permalink: /research/sovereign-debt
 excerpt: ''
-date: 2024-10-13
+date: 2024-06-20
 venue: 
 slidesurl: '/files/sovereign-debt-slides.pdf' 
 paperurl: 
