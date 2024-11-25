@@ -6,8 +6,8 @@ permalink: /research/sovereign-debt
 excerpt: ''
 date: 2024-10-13
 venue: 
-slidesurl: 
-paperurl: 'http://academicpages.github.io/files/paper2.pdf'
+slidesurl: '/files/sovereign-debt-slides.pdf' 
+paperurl: 
 citation:
 ---
 
