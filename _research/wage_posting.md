@@ -4,8 +4,8 @@ collection: research
 category: wip
 permalink: /research/wage-posting
 excerpt: ''
-date: 2015-10-01
-venue: 'Journal 1'
+date: 2024-11-01
+venue: 
 slidesurl: '/files/noisy-wage-posting-slides.pdf'
 paperurl: 
 citation: 

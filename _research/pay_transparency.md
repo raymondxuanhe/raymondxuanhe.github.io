@@ -4,10 +4,10 @@ collection: research
 category: wip
 permalink: /research/pay-transparency
 excerpt: ''
-date: 2024-11-25
+date: 2024-09-27
 venue: 
-slidesurl: 'http://academicpages.github.io/files/slides3.pdf'
-paperurl: 'http://academicpages.github.io/files/paper3.pdf'
+slidesurl: '/files/pay-transparency-slides.pdf'
+paperurl:
 citation: 
 ---
 
