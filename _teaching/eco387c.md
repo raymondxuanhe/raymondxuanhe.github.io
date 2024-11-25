@@ -1,6 +1,7 @@
 ---
 title: "ECO387C - Macroeconomics 1"
-collection: "Teaching Assistant"
+collection: "Teaching"
+category: "Teaching Assistant"
 type: "Ph.D. core course"
 permalink: /teaching/eco387c
 venue: "University of Texas at Austin, Department of Economics"
