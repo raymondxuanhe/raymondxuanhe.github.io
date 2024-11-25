@@ -12,11 +12,8 @@ Fall 2022, Fall 2023, Fall 2024
 
 Lead bi-weekly discussion sections, wrote problem sets and problem set solutions, and held office hours.
 
-Heading 1
+Slides
 ======
 
-Heading 2
-======
-
-Heading 3
+Code
 ======
