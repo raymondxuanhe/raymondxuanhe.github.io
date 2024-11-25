@@ -1,6 +1,6 @@
 ---
 title: "The Currency-Maturity Composition of Sovereign Debt"
-collection: publications
+collection: research
 category: wip
 permalink: /research/sovereign-debt
 excerpt: 'This paper is about the number 2. The number 3 is left for future work.'

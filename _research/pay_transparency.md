@@ -1,6 +1,6 @@
 ---
 title: "The Effects of Pay Transparency on the U.S. Labor Market"
-collection: publications
+collection: research
 category: wip
 permalink: /research/pay-transparency
 excerpt: 'This paper is about fixing template issue #693.'
