@@ -11,4 +11,4 @@ paperurl:
 citation: 
 ---
 
-The contents above will be part of a list of publications, if the user clicks the link for the publication than the contents of section will be rendered as a full page, allowing you to provide more information about the paper for the reader. When publications are displayed as a single page, the contents of the above "citation" field will automatically be included below this section in a smaller font.
+Using job postings microdata from Lightcast (formerly Burning Glass Technologies), we study U.S. firms' wage posting behavior. We document two novel stylized facts. Firstly, high-skill industries and occupations (where skill dispersion is also wider) are consistently more vague about wage information than their low-skilled counterparts. Secondly, we find that labor markets (segmented by occupation and state) where firms enjoy higher market power are more transparent about wages.
