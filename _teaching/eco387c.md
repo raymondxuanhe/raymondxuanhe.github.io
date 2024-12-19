@@ -22,5 +22,5 @@ Code
 
 Teaching Evaluations
 ======
-[Fall 2022](/files/TA-report-fall-2022.pdf), [Fall 2023](/files/TA-report-fall-2023.pdf), [Fall 2024](/files/TA-report-fall-2024.pdf)]
+[Fall 2022](/files/TA-report-fall-2022.pdf), [Fall 2023](/files/TA-report-fall-2023.pdf), [Fall 2024](/files/TA-report-fall-2024.pdf)
 
