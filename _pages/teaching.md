@@ -13,6 +13,8 @@ Fall 2024 for Prof. Christoph Boehm
 
 ### Slides
 
+[Arellano (2008) GPR Notebook](/files/Arellano_2008_GPR.ipynb)
+
 ### Code
 
 ### Teaching Evaluations
