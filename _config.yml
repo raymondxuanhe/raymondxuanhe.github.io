@@ -85,7 +85,7 @@ research_category:
 
 # Site Settings
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
-site_theme               : dark # default, dark, light
+site_theme               : "dark" # default, dark, light
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
 future                   : true
