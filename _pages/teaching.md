@@ -8,6 +8,8 @@ redirect_from:
 ---
 
 # Macroeconomics 1 (Ph.D. core) 
+Fall 2022 & Fall 2023, for Prof. Stefano Eusepi\
+Fall 2024 for Prof. Christoph Boehm
 
 ## Slides
 
@@ -18,6 +20,7 @@ redirect_from:
 
 
 # Other courses
-
-Science Technology and Politics (Undergraduate signature course) - Spring 2025
-
+Science Technology and Politics (undergraduate signature course) - Spring 2025\
+Introduction to Econometrics (undergraduate) - Fall 2021, Spring 2022, Spring 2023, Spring 2024\
+International Trade and Investment (undergraduate) - Summer 2023\
+Introduction to Macroeconomics (undergraduate) - Summer 2023
