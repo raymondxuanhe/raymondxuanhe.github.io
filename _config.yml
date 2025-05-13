@@ -24,7 +24,7 @@ author:
   avatar           : "raymondhe1.jpg"
   name             : "Raymond He"
   pronouns         : # example: "she/her"  
-  bio              : "4th year Ph.D. in Economics student with research interests in computational economics, labor economics, and sovereign debt."
+#  bio              : "4th year Ph.D. in Economics student with research interests in computational economics, labor economics, and sovereign debt."
   location         : "Austin, Texas"
   employer         : "University of Texas at Austin"
   uri              : # URL
