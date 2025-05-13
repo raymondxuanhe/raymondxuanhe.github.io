@@ -7,14 +7,13 @@ redirect_from:
   - /research.html
 ---
 
-# The Currency and Maturity Composition of Sovereign Debt
+ The Currency and Maturity Composition of Sovereign Debt
 
 
+ The Effects of Pay Transparency on the US Labor Market
 
-# The Effects of Pay Transparency on the US Labor Market
 
-
-# Noisy Wage Posting
+ Noisy Wage Posting
 
 
 
