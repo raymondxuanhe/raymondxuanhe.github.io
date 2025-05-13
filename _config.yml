@@ -85,7 +85,10 @@ research_category:
 
 # Site Settings
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
-site_theme               : "dark" # default, dark, light
+#site_theme               : "dark" # default, dark, light
+remote_theme: "mmistakes/minimal-mistakes@4.24.0"
+minimal_mistakes_skin: "dark" # Options include: "air", "aqua", "contrast", "dark", "dirt", "neon", "mint", "plum", "sunrise"
+
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
 future                   : true
