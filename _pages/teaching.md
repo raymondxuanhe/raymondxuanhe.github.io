@@ -1,6 +1,6 @@
 ---
 permalink: /teaching/
-title: "Testing"
+title: "Teaching"
 author_profile: true
 redirect_from: 
   - /teaching/
@@ -11,15 +11,15 @@ redirect_from:
 
 ## Macroeconomics 1 (Ph.D. core) 
 
-Slides
+### Slides
 ======
 
-Code
+### Code
 ======
 
-Teaching Evaluations
+### Teaching Evaluations
 ======
-[Fall 2022](/files/TA-report-fall-2022.pdf), [Fall 2023](/files/TA-report-fall-2023.pdf), [Fall 2024](/files/TA-report-fall-2024.pdf)
+[Fall 2022](/files/teaching_evaluations/TA-report-fall-2022.pdf), [Fall 2023](/files/teaching_evaluations/TA-report-fall-2023.pdf), [Fall 2024](/files/teaching_evaluations/TA-report-fall-2024.pdf)
 
 
 

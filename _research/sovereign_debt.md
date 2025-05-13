@@ -6,7 +6,7 @@ permalink: /research/sovereign-debt
 excerpt: ''
 date: 2024-06-20
 venue: 
-slidesurl: '/files/sovereign-debt-slides.pdf' 
+slidesurl: '/files/research_slides/sovereign-debt-slides.pdf' 
 paperurl: 
 citation:
 ---

@@ -6,7 +6,7 @@ permalink: /research/wage-posting
 excerpt: ''
 date: 2024-11-01
 venue: 
-slidesurl: '/files/noisy-wage-posting-slides.pdf'
+slidesurl: '/files/research_slides/noisy-wage-posting-slides.pdf'
 paperurl: 
 citation: 
 ---

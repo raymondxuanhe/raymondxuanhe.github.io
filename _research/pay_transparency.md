@@ -6,7 +6,7 @@ permalink: /research/pay-transparency
 excerpt: ''
 date: 2024-09-27
 venue: 
-slidesurl: '/files/pay-transparency-slides.pdf'
+slidesurl: '/files/research_slides/pay-transparency-slides.pdf'
 paperurl:
 citation: 
 ---
