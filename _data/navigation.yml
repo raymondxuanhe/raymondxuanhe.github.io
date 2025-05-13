@@ -8,20 +8,20 @@ main:
   - title: "Research"
     url: /research/
 
- # - title: "Talks"
- #   url: /talks/    
-
   - title: "Teaching"
     url: /teaching/    
-    
- # - title: "Portfolio"
- #   url: /portfolio/
-        
- # - title: "Blog Posts"
- #   url: /year-archive/
-    
+   
   - title: "CV"
     url: /files/Raymond_He_CV.pdf
     
 #  - title: "Guide"
 #    url: /markdown/
+
+ # - title: "Talks"
+ #   url: /talks/    
+
+# - title: "Portfolio"
+ #   url: /portfolio/
+        
+ # - title: "Blog Posts"
+ #   url: /year-archive/
