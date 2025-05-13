@@ -7,7 +7,7 @@ redirect_from:
   - /research.html
 ---
 
-# Works in progress
+## Works in progress
 
 **The Currency and Maturity Composition of Sovereign Debt**
 
