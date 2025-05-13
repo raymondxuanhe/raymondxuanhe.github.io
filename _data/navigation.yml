@@ -14,15 +14,14 @@ main:
   - title: "Teaching"
     url: /teaching/    
     
- - title: "CV"
-    url: /files/Raymond_He_CV.pdf
-
  # - title: "Portfolio"
  #   url: /portfolio/
         
  # - title: "Blog Posts"
  #   url: /year-archive/
     
+  - title: "CV"
+    url: /files/Raymond_He_CV.pdf
     
 #  - title: "Guide"
 #    url: /markdown/
