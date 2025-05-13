@@ -7,14 +7,10 @@ redirect_from:
   - /research.html
 ---
 
-The Currency and Maturity Composition of Sovereign Debt
+**The Currency and Maturity Composition of Sovereign Debt**
 
 
-The Effects of Pay Transparency on the US Labor Market
-with Suryansh Upmanyu
+**The Effects of Pay Transparency on the US Labor Market** (with Suryansh Upmanyu)
 
 
-Noisy Wage Posting
-with Suryansh Upmanyu and Francesco Conti
-
-
+**Noisy Wage Posting** (with Suryansh Upmanyu and Francesco Conti)
