@@ -18,7 +18,7 @@ You can find some of the teaching materials (primarily in dynamic programming an
 ### Jupyter Notebooks (with Julia code)
 1. Solving the optimal growth model (deterministic) with **discrete** state space value function iteration
 2. Solving the optimal growth model (deterministic) with **continuous** state space value function iteration
-3. Solving the optimal growth model (deterministic) with **coleman iteration**
+3. Solving the optimal growth model (deterministic) with **Coleman time iteration**
 
 ### Teaching Evaluations
 [Fall 2022](/files/teaching_evaluationsTA-report-fall-2022.pdf), [Fall 2023](/files/teaching_evaluations/TA-report-fall-2023.pdf), [Fall 2024](/files/teaching_evaluations/TA-report-fall-2024.pdf)
