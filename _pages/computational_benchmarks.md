@@ -31,7 +31,7 @@ For full transparency, I have included all the relevant specificifications of ea
 
 * CPU Cooler: Arctic Liquid Freezer III 360 mm
 * Motherboard: Gigabyte X870E Aorus Master
-* GPU: Nvidia 4080 Super (Founder's Edition)
+* GPU: Nvidia GeForce RTX 4080 Super (Founder's Edition)
 * RAM: 64 GB of G.Skill DDR5 (2 x 32GB) 6000MT/s CL30
 * SSD: 2TB Samsung 990 Pro Internal SSD PCIe Gen 4x4 NVMe
 
@@ -39,8 +39,8 @@ For full transparency, I have included all the relevant specificifications of ea
 
 * CPU Cooler: Corsair iCUE H100i ELITE CAPELLIX XT 240mm
 * Motherboard: MSI MAG B550 Tomahawk
-* GPU: Nvidia 4080 Super (Founder's Edition)
-* RAM: 64GB of DDR4 Vengeance Pro 3600MT/s CL18
+* GPU: Nvidia GeForce RTX 3060 (Gigabyte)
+* RAM: 64GB of DDR4 Corsair Vengeance Pro 3600MT/s CL18
 * SSD: 2TB Corsair MP600 Elite PCIe Gen 4x4 NVMe
 
 ### M2 Macbook Air (8 cores)
