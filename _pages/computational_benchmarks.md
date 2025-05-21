@@ -48,5 +48,5 @@ For full transparency, I have included all the relevant specificifications of ea
 * 8-core GPU, 16-core neural engine
 * 16GB unified memory
 
-[^1]: Parallelization was performed across individual files
-[^2]: The mesh consisted of 101 points for endowment, 951 points for bond holdings. Parallelization was performed across the endowment grid while evaluating the Bellman operator.
+[^1]: Parallelization was performed across individual files.
+[^2]: The mesh consisted of 101 points for endowment and 951 points for bond holdings. Parallelization was performed across the endowment grid while evaluating the Bellman operator.
