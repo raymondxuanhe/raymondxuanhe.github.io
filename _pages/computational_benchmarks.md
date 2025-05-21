@@ -48,4 +48,4 @@ For full transparency, I have included all the relevant specificifications of ea
 * 8-core GPU, 16-core neural engine
 * 16GB unified memory
 
-[^1] parallelization was performed across individual files
+[^1]: parallelization was performed across individual files
