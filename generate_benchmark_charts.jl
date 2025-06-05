@@ -76,7 +76,7 @@ p = bar(x_pos .- bar_width/2, multi_threaded,
 #        ylim   = (0,420),
         yticks = 0:60:420,
         xticks = (x_pos, cpus),
-        legend = :topright,
+        legend = :topleft,
         fontfamily = "Computer Modern",
         dpi = 300)
 
