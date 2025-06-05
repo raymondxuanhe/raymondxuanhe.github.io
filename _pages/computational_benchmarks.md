@@ -21,7 +21,7 @@ For full transparency, I have included all the relevant specificifications of ea
 
 
 ## 2. Value function iteration
-![image](/Users/raymondhe/Documents/raymondxuanhe.github.io/files/benchmarks/arellano_2008.png)
+![image info](./files/benchmarks/arellano_2008.png)
 
 
 ## Computer Specifications
