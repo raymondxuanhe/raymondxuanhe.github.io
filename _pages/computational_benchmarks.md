@@ -17,12 +17,10 @@ Here, you can find the time to compute of three different CPUs for two computati
 For full transparency, I have included all the relevant specificifications of each platform at the bottom of the page. All code was written on Julia. I am not sponsored by or affiliated with any company in any way.
 
 ## 1. Data analysis
-
-
+![image info](/files/benchmarks/lightcast.png)
 
 ## 2. Value function iteration
 ![image info](/files/benchmarks/arellano_2008.png)
-
 
 ## Computer Specifications
 
