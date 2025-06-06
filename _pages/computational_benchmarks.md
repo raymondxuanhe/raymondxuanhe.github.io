@@ -30,17 +30,17 @@ For full transparency, I have included all the relevant specificifications of ea
 * Motherboard: Gigabyte X870E Aorus Master
 * GPU: Nvidia GeForce RTX 4080 Super (Founder's Edition)
 * RAM: 64 GB of G.Skill DDR5 (2 x 32GB) 6000MT/s CL30
-* SSD: 2TB Samsung 990 Pro Internal SSD PCIe Gen 4x4 NVMe
+* SSD: 2 TB Samsung 990 Pro Internal SSD PCIe Gen 4x4 NVMe
 
 ### M4 Max (16 cores - 14 threads used for parallelization)
 
 * 40-core GPU, 16-core neural engine
-* 64GB unified memory
+* 64 GB unified memory
 
 ### M2 Macbook Air (8 cores - 6 threads used for parallelization)
 
 * 8-core GPU, 16-core neural engine
-* 16GB unified memory
+* 16 GB unified memory
 
 [^1]: Parallelization was performed across individual files.
 [^2]: The mesh consisted of 101 points for endowment and 951 points for bond holdings. Parallelization was performed across the endowment grid while evaluating the Bellman operator.
