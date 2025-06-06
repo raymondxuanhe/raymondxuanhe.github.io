@@ -57,9 +57,9 @@ savefig(p, pwd()*"/files/benchmarks/arellano_2008.png")
 #################################################
 
 # CPU performance data
-cpus = ["Ryzen 9 9950X", "M4 Max"]
-multi_threaded = [59.9, 79.0]
-single_threaded = [152.5, 346.4]
+cpus = ["Ryzen 9 9950X", "M4 Max", "M2"]
+multi_threaded = [59.9, 79.0, 245.1]
+single_threaded = [152.5, 346.4, 459.3]
 
 # Create positions for grouped bars
 x_pos = 1:length(cpus)
@@ -73,8 +73,8 @@ p = bar(x_pos .- bar_width/2, multi_threaded,
         title = "Cleaning & processing a large dataset",
         xlabel = "CPU",
         ylabel = "Time (minutes)",
-#        ylim   = (0,420),
-        yticks = 0:60:420,
+        ylim   = (0,480),
+        yticks = 0:60:480,
         xticks = (x_pos, cpus),
         legend = :topleft,
         fontfamily = "Computer Modern",
