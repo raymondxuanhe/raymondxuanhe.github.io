@@ -1,0 +1,64 @@
+# Introduction to Value Function Iteration
+
+This Julia notebook is intended to serve as an introduction to using value function iteration to solve dynamic economic models. Throughout my exposition, I will try to explain `non-obvious' lines of code or choices, with a heavy emphasis on what practical issue they address or resolve.
+
+# 1. Initialization
+
+We first need to initialize all the objects that we will be using throughout the rest of the code. This includes our parameters (both economic and numerical) and functions. 
+
+There are two noteworthy matters. 
+1. I am using these functional forms and parameter values (note that implicitly, $\delta = 1$) because this parameterization lends itself to an analytical solution with which we can verify our numerical solution against. 
+
+$$
+v(y) = \frac{\ln(1-\alpha\beta)}{1-\beta}
+$$
+
+Of course, the moment we depart from this parameterization, our analytical benchmark disappears (I will explain another way to verify that our numerical solution is correct in the next notebook). However, I still find this setting to be useful when learning a new algorithm or computational tool (even if it is complete overkill for solving this model) because having that analytical benchmark is useful for confirming whether I am implementing the extension correctly or not. 
+
+2. For expository purposes I am declaring the parameters in an interpreted way, i.e. everything is declared line-by-line. For interpreted languages like MATLAB and Python, this is what we would do anyway. However, Julia is a compiled language, which means that the majority of our code should be written in a function or housed inside a struct. In settings where performance becomes crucial, this would usually be bad practice. (Note that declaring our parameters to be a constant is not strictly necessary. However, it is a minor optimization because it tells Julia's compiler that this parameter will not change.) 
+
+
+```julia
+using Interpolations
+using Optim
+using LinearAlgebra
+using Plots
+
+const β = 0.96
+const α = 0.4
+
+f(k) = k^α
+u(c) = c > 0.0 ? log(c) : -1e10
+```
+
+## 1.1 Utility function
+
+You may be wondering why the utility function is written this way. In Julia, this is called the *tenery operator* and it reads as the following: "evaluate the statement to the left of the ?. If the statement is true, then return what is to the left of the colon. If it's false, return what is to the right of the colon. (If tenery operators are not available in your programming language, a custom function with an if-statement should work as well.) 
+
+In practice, this is very useful over simply writing $u(c) = log(c)$ for two reasons. 
+1. Economics tells us that utility functions are only defined over weakly positive consumption, yet there is nothing mathematical that inherently forces this limitation for most utility functions. This becomes really important in the optimization step later, because when we are trying to maximize the utility function, we need to eliminate solutions that are only possible with negative consumption. By returning a very large negative number, we can hopefully steer the optimizer away from choices that imply negative consumption. The optimizer may still attempt it, but it will be attached with such a large penalty such that these choices will never appear as the solution.
+2. In the rare case that mathematics enforces this limitation (e.g. the log-function like this), our code would usually stop entirely, and return an error message that tells us that taking the log of a negative number is not possible without complex numbers. Meanwhile, our function is still defined over negative numbers, bypassing this issue.  
+
+## 1.2 Creating the state-space (grid)
+
+Next, we 
+
+
+### How do we know how many grid-points we should use?
+
+There is a trade-off when deciding how many gridpoints to use. If *too few* gridpoints are used, then it becomes difficult to find an accurate solution (especially if the state space is completely discretized - the results of the optimization would more be due to rounding error rather than being the true optimizer). However, we wouldn't want to use *too many* gridpoints either, because it would dramatically increase the time (and memory) needed for each iteration. In our one-dimensional model today, this would not be an issue on modern hardware, but since the number of gridpoints increases *exponentially* with the dimensionality, we also need to be wary against too many gridpoints. 
+
+Ex-ante, it is impossible to know what the optimal number of gridpoints is, especially since it is heavily model and algorithm-dependent. One useful rule is to start with a lower estimate of the number of gridpoints in one run, then slowly increase it. If the solution changes significantly, then it was not enough points. Only when your solution is robust to this parameter, can you be confident that it is enough.
+
+### How do we know how wide our bounds should be?
+
+Again, there is a trade-off associated with this choice. We cannot make it *too narrow*; otherwise, we would not capture the model's dynamics well. We also cannot make it *too wide*, because for the same number of gridpoints, the space between them would increase, worsening our accuracy (unless more gridpoints are used). 
+
+Economics sometimes gives natural limits. For example, negative capital is not possible.
+
+
+
+```julia
+const kmin = 1e-3;
+const kmax = 90.0;
+```

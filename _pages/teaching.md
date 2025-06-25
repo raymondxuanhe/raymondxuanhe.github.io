@@ -11,7 +11,7 @@ redirect_from:
 Fall 2022 & Fall 2023, for Prof. Stefano Eusepi, and Fall 2024 for Prof. Christoph Boehm
 
 ### Jupyter Notebooks
-[1. Value Function Iteration](/files/jupyter_notebooks/practical_vfi.ipynb)
+[1. Value Function Iteration](/files/jupyter_notebooks/practical_vfi.md)
 
 ### Teaching Evaluations
 [Fall 2022](/files/teaching_evaluations/TA-report-fall-2022.pdf), [Fall 2023](/files/teaching_evaluations/TA-report-fall-2023.pdf), [Fall 2024](/files/teaching_evaluations/TA-report-fall-2024.pdf)
