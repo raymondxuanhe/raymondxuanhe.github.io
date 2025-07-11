@@ -3,7 +3,7 @@
 <html lang="en">
 <head><meta charset="utf-8"/>
 <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
-<title>practical_vfi</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
+<title>1_practical_vfi</title><script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.1.10/require.min.js"></script>
 <style type="text/css">
     pre { line-height: 125%; }
 td.linenos .normal { color: inherit; background-color: transparent; padding-left: 5px; padding-right: 5px; }
@@ -7517,7 +7517,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Introduction-to-Value-Function-Iteration">Introduction to Value Function Iteration<a class="anchor-link" href="#Introduction-to-Value-Function-Iteration">¶</a></h1><p>This Julia notebook is intended to serve as an introduction to using value function iteration to solve dynamic economic models. Throughout my exposition, I will try to explain `non-obvious' lines of code or choices, with a heavy emphasis on what practical issue they address or resolve.</p>
+<h1 id="A-practical-introduction-to-Value-Function-Iteration">A practical introduction to Value Function Iteration<a class="anchor-link" href="#A-practical-introduction-to-Value-Function-Iteration">¶</a></h1><p>This Julia notebook is intended to serve as an introduction to using value function iteration to solve recursive dynamic economic models. I assume that you already know the deterministic neoclassical growth model and have been exposed to dynamic programming, so today's focus will solely be on writing code to solve it. Throughout my exposition, I will try to explain as many `non-obvious' lines of code or choices as possible, with a heavy emphasis on what practical issue they address, especially when the problem we are solving stops becoming well-behaved like this one.</p>
 </div>
 </div>
 </div>
@@ -7528,22 +7528,11 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="1.-Initialization">1. Initialization<a class="anchor-link" href="#1.-Initialization">¶</a></h1><p>We first need to initialize all the objects that we will be using throughout the rest of the code. This includes our parameters (both economic and numerical) and functions.</p>
-<p>There are two noteworthy matters.</p>
-<ol>
-<li>I am using these functional forms and parameter values (note that implicitly, $\delta = 1$) because this parameterization lends itself to an analytical solution with which we can verify our numerical solution against.</li>
-</ol>
-<p>$$
-v(y) = \frac{\ln(1-\alpha\beta)}{1-\beta}
-$$</p>
-<p>Of course, the moment we depart from this parameterization, our analytical benchmark disappears (I will explain another way to verify that our numerical solution is correct in the next notebook). However, I still find this setting to be useful when learning a new algorithm or computational tool (even if it is complete overkill for solving this model) because having that analytical benchmark is useful for confirming whether I am implementing the extension correctly or not.</p>
-<ol start="2">
-<li>For expository purposes I am declaring the parameters in an interpreted way, i.e. everything is declared line-by-line. For interpreted languages like MATLAB and Python, this is what we would do anyway. However, Julia is a compiled language, which means that the majority of our code should be written in a function or housed inside a struct. In settings where performance becomes crucial, this would usually be bad practice. (Note that declaring our parameters to be a constant is not strictly necessary. However, it is a minor optimization because it tells Julia's compiler that this parameter will not change.)</li>
-</ol>
+<h1 id="1.-Initialization">1. Initialization<a class="anchor-link" href="#1.-Initialization">¶</a></h1><p>We first need to load all the packages and initialize all the objects that we will be using throughout the rest of the code. This includes our parameters (both economic and numerical) and functions.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=b2bfbb85-ecd0-4f1b-a753-e4460009bbde">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=b2bfbb85-ecd0-4f1b-a753-e4460009bbde">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7560,9 +7549,42 @@ $$</p>
 <span class="k">const</span><span class="w"> </span><span class="n">α</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.4</span>
 
 <span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">k</span><span class="o">^</span><span class="n">α</span>
-<span class="n">u</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">&gt;</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">1e10</span>
+<span class="n">u</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">≥</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="n">log</span><span class="p">(</span><span class="n">c</span><span class="p">)</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">1e10</span>
 </pre></div>
 </div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>u (generic function with 1 method)</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=5e1cccaa">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>There are two noteworthy matters.</p>
+<ol>
+<li><p>I am using these functional forms and parameter values (note that $\delta = 1$ implicitly) because this parameterization lends itself to an analytical solution from Sargeant Ljundvist with which we can verify our numerical solution against.
+$$
+v(y) = \frac{\ln(1-\alpha\beta)}{1-\beta}
+$$
+Of course, the moment we depart from this parameterization, our analytical benchmark disappears (I will explain another way to verify that our numerical solution is correct in the next notebook). However, I still find this setting to be extremely useful when learning a new algorithm or computational tool (even if it is complete overkill for solving this model) because having that analytical benchmark is useful for confirming whether I am implementing the extension correctly or not.</p>
+</li>
+<li><p>For expository purposes I am declaring the parameters in an interpreted way, i.e. everything is declared line-by-line. For interpreted languages like MATLAB and Python, this is what we would do anyway. However, Julia is a compiled language, which means that the overwhelming majority of our code should be written in a function or housed inside a struct. In settings where performance becomes crucial, this would usually be terrible practice. (Declaring our parameters to be a constant is not strictly necessary. However, it is a minor optimization because it tells Julia's compiler that this parameter will not change.)</p>
+</li>
+</ol>
 </div>
 </div>
 </div>
@@ -7573,11 +7595,11 @@ $$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.1-Utility-function">1.1 Utility function<a class="anchor-link" href="#1.1-Utility-function">¶</a></h2><p>You may be wondering why the utility function is written this way. In Julia, this is called the <em>tenery operator</em> and it reads as the following: "evaluate the statement to the left of the ?. If the statement is true, then return what is to the left of the colon. If it's false, return what is to the right of the colon. (If tenery operators are not available in your programming language, a custom function with an if-statement should work as well.)</p>
+<h2 id="1.1-Utility-function">1.1 Utility function<a class="anchor-link" href="#1.1-Utility-function">¶</a></h2><p>You may be wondering why the utility function is written this way. In Julia, this is called the <em>tenery operator</em> and it reads as the following: "evaluate the statement to the left of the ?. If the statement (consumption is weakly positive) is true, then return what is to the left of the colon ($log(c)$). If it's false, return what is to the right of the colon (an arbitrary, but very negative number). If tenery operators are not available in your programming language, a custom function with an if-statement should work as well.</p>
 <p>In practice, this is very useful over simply writing $u(c) = log(c)$ for two reasons.</p>
 <ol>
 <li>Economics tells us that utility functions are only defined over weakly positive consumption, yet there is nothing mathematical that inherently forces this limitation for most utility functions. This becomes really important in the optimization step later, because when we are trying to maximize the utility function, we need to eliminate solutions that are only possible with negative consumption. By returning a very large negative number, we can hopefully steer the optimizer away from choices that imply negative consumption. The optimizer may still attempt it, but it will be attached with such a large penalty such that these choices will never appear as the solution.</li>
-<li>In the rare case that mathematics enforces this limitation (e.g. the log-function like this), our code would usually stop entirely, and return an error message that tells us that taking the log of a negative number is not possible without complex numbers. Meanwhile, our function is still defined over negative numbers, bypassing this issue.</li>
+<li>In the rare case that mathematics enforces this limitation (e.g. the log-function), our code would usually stop entirely, and return an error message telling us that taking the log of a negative number is not possible without complex numbers. However, since our custom function is still defined over negative numbers, we bypass this issue entirely.</li>
 </ol>
 </div>
 </div>
@@ -7589,16 +7611,11 @@ $$</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.2-Creating-the-state-space-(grid)">1.2 Creating the state-space (grid)<a class="anchor-link" href="#1.2-Creating-the-state-space-(grid)">¶</a></h2><p>Next, we create our state-space. Mathematically our state-space is continuous with infinitely-many elements but this is impossible to store on our computer. In practice, we substitute this with a discrete grid of points (with finitely many elements)/</p>
-<h3 id="1.2.1-How-many-grid-points-we-should-use?">1.2.1 How many grid-points we should use?<a class="anchor-link" href="#1.2.1-How-many-grid-points-we-should-use?">¶</a></h3><p>There is a trade-off when deciding how many gridpoints to use. If <em>too few</em> gridpoints are used, then it becomes difficult to find an accurate solution (especially if the state space is completely discretized - the results of the optimization would more be due to rounding error rather than being the true optimizer). However, we wouldn't want to use <em>too many</em> gridpoints either, because it would dramatically increase the time (and memory) needed for each iteration. In our one-dimensional model today, this would not be an issue on modern hardware, but since the number of gridpoints increases <em>exponentially</em> with the dimensionality, we also need to be wary against too many gridpoints.</p>
-<p>Ex-ante, it is impossible to know what the optimal number of gridpoints is, especially since it is heavily model and algorithm-dependent. One useful rule is to start with a lower estimate of the number of gridpoints in one run, then slowly increase it. If the solution changes significantly, then it was not enough points. Only when your solution is robust to this parameter, can you be confident that it is enough.</p>
-<h3 id="1.2.2-How-wide-our-bounds-should-be?">1.2.2 How wide our bounds should be?<a class="anchor-link" href="#1.2.2-How-wide-our-bounds-should-be?">¶</a></h3><p>Again, there is a trade-off associated with this choice. We cannot make it <em>too narrow</em>; otherwise, we would not capture the model's dynamics well. We also cannot make it <em>too wide</em>, because for the same number of gridpoints, the space between them would increase, and the accuracy of our solution would suffer (unless more gridpoints are used).</p>
-<p>Fortunately, our problem is sometimes blessed with natural limits. For example, negative capital is not possible, so setting the lower bound to zero or close to zero is a good choice. Here, the upper-bound is less obvious. Sometimes, economics can give guidance. For instance, in this problem where a unique steady-state exists, any grid that does not include the steady-state value of capital would likely result in a terrible approximation. On the flip-side, the upper-bound likely wouldn't need to be significantly larger than this. This is a parameter worth playing around (there are literatures where the numerical results are <strong>highly</strong> sensitive to this), but like before, you can be confident that your grid is wide enough when enlarging it stops resulting in the results changing.</p>
-<h3 id="1.2.3-How-should-we-space-our-points-out-across-the-bounds?">1.2.3 How should we space our points out across the bounds?<a class="anchor-link" href="#1.2.3-How-should-we-space-our-points-out-across-the-bounds?">¶</a></h3><p>In this code (and most introductory code), the gridpoints for capital are uniformly spread out. In low dimensional and well-behaved environments like this, this is perfectly fine since increasing the number of grid-points is not likely to be overly expensive. However, this is not optimal, and if your state-space is high dimensional (in practice, 3 dimensions) or your desired functions are nasty (e.g. it has kinks, discontinuities, or regions of high curvature), equidistant-spaced grids become outright prohibitive. For a given finite budget of gridpoints, they should be concentrated around regions where the function is badly behaved because more gridpoints are needed to capture this behavior and increase your solutions' accuracy.</p>
+<h2 id="1.2-Creating-the-state-space-(grid)">1.2 Creating the state-space (grid)<a class="anchor-link" href="#1.2-Creating-the-state-space-(grid)">¶</a></h2><p>Next, we create our state-space. Mathematically our state-space is continuous with infinitely-many elements. However, this is impossible to store on our computer, much less perform complicated calculations on. In practice, we substitute this with a discrete grid of points (with finitely many elements) which in this case, is a 90-element vector from 0.001 to 90.0.</p>
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=78b99dc7">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=78b99dc7">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
@@ -7608,8 +7625,147 @@ $$</p>
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">kmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-3</span><span class="p">;</span>
 <span class="k">const</span><span class="w"> </span><span class="n">kmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">90.0</span><span class="p">;</span>
-<span class="k">const</span><span class="w"> </span><span class="n">nk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1000</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">nk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1_000</span><span class="p">;</span>
 <span class="n">kgrid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">kmax</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="o">=</span><span class="n">nk</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>0.001:0.0900890890890891:90.0</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=73226089">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>There are three extremely important numerical issues to consider.</p>
+<h3 id="1.2.1-How-many-grid-points-we-should-use?">1.2.1 How many grid-points we should use?<a class="anchor-link" href="#1.2.1-How-many-grid-points-we-should-use?">¶</a></h3><p>There is a trade-off when deciding how many gridpoints to use. If <em>too few</em> gridpoints are used, then it becomes difficult to find an accurate solution (especially if the state space is completely discretized - the results of the optimization step would more be due to rounding error rather than being the true optimizer). However, we wouldn't want to use <em>too many</em> gridpoints either, because it would dramatically increase the time (and memory) needed for each iteration. In our one-dimensional model today, this would not be an issue on modern hardware, but since the number of gridpoints increases <em>exponentially</em> with the dimensionality of the state-space, we also need to be wary against too many gridpoints.</p>
+<p>Ex-ante, it is impossible to know what the optimal number of gridpoints is, especially since it is heavily model and algorithm-dependent. One useful rule is to start with a lower estimate of the number of gridpoints in one run, then slowly increase it. If the solution changes significantly, then it was not enough points. Only when your solution is robust to this parameter, can you be confident that it is enough.</p>
+<h3 id="1.2.2-How-wide-should-our-bounds-be?">1.2.2 How wide should our bounds be?<a class="anchor-link" href="#1.2.2-How-wide-should-our-bounds-be?">¶</a></h3><p>Again, there is a trade-off associated with this choice. We cannot make it <em>too narrow</em>. At best, we would not accurately capture the model's dynamics while at worst, we would not find convergence at all. We also cannot make it <em>too wide</em>, because for the same number of gridpoints, the space between them would increase, and the accuracy of our solution would suffer (unless more gridpoints are used, thus increasing computatio time).</p>
+<p>Fortunately, our problem is sometimes blessed with natural limits. For example, negative capital is not possible, so setting the lower bound to zero or close to zero is a good choice. Here, the upper-bound is less obvious. Sometimes, economics can give guidance. For instance, in this problem where a unique steady-state exists, any grid that does not include the steady-state value of capital would likely result in a terrible approximation. On the flip-side, the upper-bound likely wouldn't need to be significantly larger than this. This is a parameter worth playing around (there are literatures where the numerical results are <strong>highly</strong> sensitive to this), but like before, you can be confident that your grid is wide enough when enlarging it stops resulting in the results changing.</p>
+<h3 id="1.2.3-How-should-we-space-our-points-out-across-the-bounds?">1.2.3 How should we space our points out across the bounds?<a class="anchor-link" href="#1.2.3-How-should-we-space-our-points-out-across-the-bounds?">¶</a></h3><p>In this code (and most introductory code), the gridpoints for capital are uniformly spread out. In low dimensional and well-behaved environments like this, this is perfectly fine since increasing the number of grid-points is not likely to be overly expensive. However, this is not <strong>optimal</strong>, and if your state-space is high dimensional (in practice, 3 dimensions) or your desired functions are nasty (e.g. it has kinks, discontinuities, or regions of high curvature), equidistant-spaced grids become outright prohibitive. For a given finite budget of gridpoints, they should be concentrated around regions where the function is badly behaved because more gridpoints are needed to capture this behavior and increase your solutions' accuracy.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=ec3ad304">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="2.-Writing-the-Bellman-operator">2. Writing the Bellman operator<a class="anchor-link" href="#2.-Writing-the-Bellman-operator">¶</a></h2><p>Below is the function that implements the Bellman operator for a given guess of the value function. First, it finds the argument $k^\prime$, bounded between kmin and $f(k)$ that attains the maximum of the Bellman equation at a given point in the discretized state-space. The maximized value and accompanying maximizer are then stored in the appropriate vector which was already pre-declared. Finally, it outputs the new value function, or $T(v)$.</p>
+<p>Since the Optim.jl's optimize function is used to find the <strong>minimum</strong> of functions, we transform our problem by taking the negative of everything so we are actually finding the <strong>maximum</strong>.</p>
+<p>This is arguably the most important part of the code, so make sure you understand it!</p>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3f9255d5">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">v_old</span><span class="p">)</span>
+<span class="w">    </span><span class="n">value_func</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearInterpolation</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">v_old</span><span class="p">)</span>
+<span class="w">    </span><span class="n">Tv_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">grid</span><span class="p">))</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="p">(</span><span class="n">i</span><span class="p">,</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">collect</span><span class="p">(</span><span class="n">enumerate</span><span class="p">(</span><span class="n">grid</span><span class="p">))</span>
+<span class="w">        </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimize</span><span class="p">(</span><span class="n">k′</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k′</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">value_func</span><span class="p">([</span><span class="n">k′</span><span class="p">]),</span><span class="w"> </span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+<span class="w">        </span><span class="n">Tv_new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">results</span><span class="o">.</span><span class="n">minimum</span>
+<span class="w">        </span><span class="n">policy</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">results</span><span class="o">.</span><span class="n">minimizer</span>
+<span class="w">    </span><span class="k">end</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Tv_new</span>
+<span class="k">end</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>bellman_operator (generic function with 1 method)</pre>
+</div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=d0962482">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<p>There are two noteworthy matters.</p>
+<ol>
+<li><p>While we are inputting a vector (our previous guess of the value function evaluated at our <strong>finite</strong> grid of points), we are ultimately maximizing over the continuous function <strong>value_func</strong>, which is constructed via linear interpolation on our inputted guess. This means that we are</p>
+</li>
+<li><p>A critical issue is the bounds that we feed to the optimization algorithm. Economics tells us that as per the resource constraint, we the largest that $k^\prime$ can be is $f(k)$. Once again, there is nothing that inherently forces the optimizer to respect this limitation unless we force it to. This may become a very severe problem in the initial few iterations where our approximation of $v(k)$ is poor, a</p>
+</li>
+</ol>
+<p>In principle, this should not be an issue because based on the way the utility function is written, a massive penalty should be outputted for choices of $k^\prime$ that require negative consumption and indeed, for standard interpolation schemes like linear and cubic splines. However, when as we use more advanced tools, implementing these kinds of checks and constraints become increasingly crucial, especially when our likely poor approximation of $v(k)$ the initial few iterations can lead to non-sensical optimums.</p>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=fd85875a">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="2.-Main-loop">2. Main loop<a class="anchor-link" href="#2.-Main-loop">¶</a></h2>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=6ae3ad89">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-julia"><pre><span></span><span class="n">iiter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
+<span class="n">max_iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">600</span><span class="p">;</span>
+<span class="n">tol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-6</span><span class="p">;</span>
+
+<span class="n">v_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="o">.</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">grid</span><span class="p">))</span>
+
+<span class="k">while</span><span class="w"> </span><span class="n">iiter</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">max_iter</span>
+<span class="w">    </span><span class="n">iiter</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
+
+<span class="w">    </span><span class="n">v_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">v_old</span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">v_new</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">v_old</span><span class="p">,</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span>
+
+<span class="w">    </span><span class="n">println</span><span class="p">(</span><span class="s">"Iteration: </span><span class="si">$iiter</span><span class="s">, Error: </span><span class="si">$diff</span><span class="s">"</span><span class="p">)</span>
+<span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">diff</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">tol</span>
+<span class="w">        </span><span class="k">break</span>
+<span class="w">    </span><span class="k">end</span><span class="w"> </span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">v_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">copy</span><span class="p">(</span><span class="n">v_new</span><span class="p">)</span>
+<span class="k">end</span>
 </pre></div>
 </div>
 </div>

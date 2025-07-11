@@ -10,8 +10,9 @@ redirect_from:
 ## Macroeconomics 1 (Ph.D. core) 
 Fall 2022 & Fall 2023, for Prof. Stefano Eusepi, and Fall 2024 for Prof. Christoph Boehm
 
-[comment]: <>### Notes on computational macroeconomics
-[comment]: <>[1. Value Function Iteration](/files/jupyter_notebooks/practical_vfi.html)
+### Notes on computational macroeconomics
+[comment]: <>[0. Interpolation and numerical integration ](/files/jupyter_notebooks/0_interpollation_&_numerical_integration.html)
+[1. Value Function Iteration](/files/jupyter_notebooks/1_practical_vfi.html)
 [comment]: <>[2. Policy Function Iteration](/files/jupyter_notebooks/pratical_pfi.html)
 
 ### Teaching Evaluations
