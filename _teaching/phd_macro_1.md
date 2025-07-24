@@ -1,9 +1,9 @@
 ---
 title: "Ph.D. Macroeconomics 1"
 collection: teaching
-type: ""
+type: "Teaching Assistant"
 permalink: /teaching/phd_macro_1
-venue: ""
+venue: "UT Austin"
 date: 2025-01-01
 location: ""
 ---
