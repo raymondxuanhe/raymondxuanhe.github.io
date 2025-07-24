@@ -4,7 +4,7 @@ collection: teaching
 #type: "Workshop"
 permalink: /phd_macro_1
 #venue: "University 1, Department"
-date: 2025-01-01
+date:
 #location: "City, Country"
 ---
 
