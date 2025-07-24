@@ -88,7 +88,7 @@ publication_category:
 
 # Site Settings
 #remote_theme: pages-themes/leap-day@v0.2.0
-theme                    : jekyll-theme-minimal
+#theme                    : jekyll-theme-minimal
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
