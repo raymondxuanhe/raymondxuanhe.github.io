@@ -1,11 +1,11 @@
 ---
 title: "Ph.D. Macroeconomics 1"
 collection: teaching
-type: "Workshop"
+type: ""
 permalink: /teaching/phd_macro_1
-venue: "University 1, Department"
+venue: ""
 date: 2025-01-01
-location: "City, Country"
+location: ""
 ---
 
 Fall 2022 & Fall 2023, for Prof. Stefano Eusepi, and Fall 2024 for Prof. Christoph Boehm
