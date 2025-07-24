@@ -1,6 +1,6 @@
 ---
 title: "Ph.D. Macroeconomics 1"
-#collection: teaching
+collection: teaching
 #type: "Workshop"
 permalink: /phd_macro_1
 #venue: "University 1, Department"
