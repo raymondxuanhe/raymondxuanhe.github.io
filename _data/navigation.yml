@@ -13,10 +13,6 @@ main:
 
   - title: "Teaching"
     url: /teaching/    
-
     
   - title: "CV"
-    url: /cv/
-    
-  # - title: "CV"
-  #   url: /cv-json/
+    url: /files/Raymond_He_CV.pdf
