@@ -1,10 +1,10 @@
 ---
-title: "Ph.D. Macroeconomics 1 (ECO387C)"
+title: "Ph.D. Macroeconomics 1"
 collection: teaching
 #type: "Workshop"
 permalink: /phd_macro_1
 #venue: "University 1, Department"
-#date: 2015-01-01
+date: 2025-01-01
 #location: "City, Country"
 ---
 
