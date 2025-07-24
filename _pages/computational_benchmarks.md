@@ -7,7 +7,7 @@ redirect_from:
   - /computational_benchmarks.html
 ---
 
-Here, you can find the time to compute of three different CPUs for two computationally intensive tasks:
+You can find the time-to-compute of three different CPUs for two computationally intensive tasks:
 
 1. Reading, and cleaning 615 GB (compressed) of data,[^1] and 
 2. Value function iteration solving the [Arellano (2008)](https://www.aeaweb.org/articles?id=10.1257/aer.98.3.690) model on a fine grid.[^2]
