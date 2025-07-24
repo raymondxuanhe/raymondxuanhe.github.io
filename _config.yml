@@ -87,7 +87,7 @@ publication_category:
     title: 'Conference Papers'
 
 # Site Settings
-remote_theme: pages-themes/minimal@v0.2.0
+theme                    : jekylll-theme-leap-day
 teaser                   :  # filename of teaser fallback teaser image placed in /images/, .e.g. "500x300.png"
 breadcrumbs              : false # true, false (default)
 words_per_minute         : 160
@@ -309,7 +309,7 @@ plugins:
   - jekyll-sitemap
   - jekyll-redirect-from
   - jemoji
-  - jekyll-remote-theme # add this line to the plugins list if you already have one
+
 # Mimic GitHub Pages with --safe
 whitelist:
   - jekyll-feed
