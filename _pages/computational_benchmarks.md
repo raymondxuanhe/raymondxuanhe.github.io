@@ -3,7 +3,7 @@ permalink: /computational_benchmarks/
 title: "Computational Benchmarks"
 author_profile: true
 redirect_from: 
-  - /computational_benchmarks/
+#  - /computational_benchmarks/
   - /computational_benchmarks.html
 ---
 
