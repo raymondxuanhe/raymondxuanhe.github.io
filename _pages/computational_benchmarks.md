@@ -7,7 +7,7 @@ redirect_from:
   - /computational_benchmarks.html
 ---
 
-You can find the time to compute of three different CPUs for two computationally intensive tasks:
+You can find the time-to-compute of three different CPUs for two computationally intensive tasks:
 
 1. Reading, and cleaning 615 GB (compressed) of data,[^1] and 
 2. Value function iteration solving the [Arellano (2008)](https://www.aeaweb.org/articles?id=10.1257/aer.98.3.690) model on a fine grid.[^2]
@@ -16,7 +16,7 @@ You can find the time to compute of three different CPUs for two computationally
 
 For full transparency, I have included all the relevant specificifications of each platform at the bottom of the page. All code was written on Julia. I am not sponsored by or affiliated with any company in any way.
 
-## 1. Data analysis
+## 1. Data processing
 ![image info](/files/benchmarks/lightcast.png)
 
 ## 2. Value function iteration
@@ -32,12 +32,12 @@ For full transparency, I have included all the relevant specificifications of ea
 * RAM: 64 GB of G.Skill DDR5 (2 x 32GB) 6000MT/s CL30
 * SSD: 2 TB Samsung 990 Pro Internal SSD PCIe Gen 4x4 NVMe
 
-### M4 Max (16 cores - 14 threads used for parallelization)
+### M4 Max Studio (16 cores - 14 threads used for parallelization)
 
 * 40-core GPU, 16-core neural engine
 * 64 GB unified memory
 
-### M2 Macbook Air (8 cores - 6 threads used for parallelization)
+### M2 Macbook Air 13 inch (8 cores - 6 threads used for parallelization)
 
 * 8-core GPU, 16-core neural engine
 * 16 GB unified memory
