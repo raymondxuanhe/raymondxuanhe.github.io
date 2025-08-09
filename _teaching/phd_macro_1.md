@@ -8,7 +8,7 @@ date: 2025-01-01
 location: ""
 ---
 
-Fall 2022 & Fall 2023, for Prof. Stefano Eusepi, and Fall 2024 for Prof. Christoph Boehm
+Fall 2022 & Fall 2023, Fall 2025 for Prof. Stefano Eusepi, and Fall 2024 for Prof. Christoph Boehm
 
 [comment]: <>### Notes on computation
 [comment]: <>[0. Interpolation and numerical integration ](/files/jupyter_notebooks/0_interpollation_numerical_integration.html)
