@@ -16,5 +16,4 @@ Fall 2022 & Fall 2023, Fall 2025 for Prof. Stefano Eusepi, and Fall 2024 for Pro
 * [2. Policy function iteration](/files/jupyter_notebooks/pratical_pfi.html)
 
 # Teaching Evaluations
-======
 [Fall 2022](/files/teaching_evaluations/TA-report-fall-2022.pdf), [Fall 2023](/files/teaching_evaluations/TA-report-fall-2023.pdf), [Fall 2024](/files/teaching_evaluations/TA-report-fall-2024.pdf)

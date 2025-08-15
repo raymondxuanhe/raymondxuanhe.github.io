@@ -3,7 +3,6 @@ permalink: /computational_benchmarks/
 title: "Computational Benchmarks"
 author_profile: true
 redirect_from: 
-#  - /computational_benchmarks/
   - /computational_benchmarks.html
 ---
 
@@ -43,4 +42,4 @@ For full transparency, I have included all the relevant specificifications of ea
 * 16 GB unified memory
 
 [^1]: Parallelization was performed across individual files.
-[^2]: The mesh consisted of 101 points for endowment and 951 points for bond holdings. Parallelization was performed across the endowment grid while evaluating the Bellman operator.
+[^2]: The mesh consisted of 101 points for endowment and 951 points for debt. Parallelization was performed across the endowment grid while evaluating the Bellman operator.
