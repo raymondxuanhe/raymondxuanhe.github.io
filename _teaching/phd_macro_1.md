@@ -10,10 +10,10 @@ location: ""
 
 Fall 2022 & Fall 2023, Fall 2025 for Prof. Stefano Eusepi, and Fall 2024 for Prof. Christoph Boehm
 
-[comment]: <>### Notes on computation
-[comment]: <>[0. Interpolation and numerical integration ](/files/jupyter_notebooks/0_interpollation_numerical_integration.html)
-[comment]: <>[1. Value Function Iteration](/files/jupyter_notebooks/1_practical_vfi.html)
-[comment]: <>[2. Policy Function Iteration](/files/jupyter_notebooks/pratical_pfi.html)
+### Notes on computation
+[0. Numerical Tools](/files/jupyter_notebooks/0_numerical_tools.html)
+[1. Value Function Iteration](/files/jupyter_notebooks/1_practical_vfi.html)
+[2. Policy Function Iteration](/files/jupyter_notebooks/pratical_pfi.html)
 
 Teaching Evaluations
 ======
