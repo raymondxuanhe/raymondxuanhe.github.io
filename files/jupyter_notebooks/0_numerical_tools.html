@@ -7551,7 +7551,7 @@ We need to make 3 important choices:</p>
 <li>the $w_i$'s, or <strong>quadrature weights</strong>, and</li>
 <li>$N$, the number of function evaluations.</li>
 </ol>
-<p>There are many methods (Simpson's rule, Midpoint rule, the Trapezoid rule), but for today, we will only cover <strong>Gaussian quadrature</strong>[^1]. This method picks the $x_i$'s and $w_i$'s to satisfy $2N$ `moment-matching' conditions (for a given $N$):
+<p>There are many methods (Simpson's rule, Midpoint rule, the Trapezoid rule), but for today, we will only cover <strong>Gaussian quadrature</strong>. This method picks the $x_i$'s and $w_i$'s to satisfy $2N$ `moment-matching' conditions (for a given $N$):
 $$
 \int_I x^k \omega(x) dx = \sum_{i=1}^N w_i x_i^k \hspace{0.2cm} \text{for} \hspace{0.2cm} k = 0, \ldots, 2N-1.
 $$
@@ -7578,15 +7578,13 @@ When $\omega(x) \equiv 1$, we are calculating the area under a curve, and this i
 <ol>
 <li>Constraints - JuMP is the best at <strong>constrained</strong> optimization, especially when you have multiple and/or complicated constraints. The other packages support constrained optimization and root-finding too, but the constraints are used expressed in terms of explicit upper and lower bounds, which is not nearly flexible (or easy) as JuMP.</li>
 <li>Ease -  JuMP also leads the pack in terms of ease of translating your mathematical problem written on pen and paper into the computer.</li>
-<li>Documentation - of the packages I listed above, JuMP is probably the most well-documented and accessible to new-comers. There are alot of tutorials and resources which show off the many amazing features this package has. Moreover, if you ask a question about JuMP on the Julia Discourse, developers are usually very kind about answerering it.[^2]</li>
+<li>Documentation - of the packages I listed above, JuMP is probably the most well-documented and accessible to new-comers. There are alot of tutorials and resources which show off the many amazing features this package has. Moreover, if you ask a question about JuMP on the Julia Discourse, developers are usually very kind about answerering it.</li>
 </ol>
 <p>Unfortunately, JuMP also suffers from two important drawbacks:</p>
 <ol>
 <li>Compatibility with other packages - unfortunately, JuMP does not play well with other Julia packages, especially when it comes to defining a complicated objective function that relies on other packages to be defined. At best, some of these issues can be surmounted at the cost of alot of overhead from converting objects into a format that JuMP accepts.</li>
 <li>Differentiation - JuMP's solvers need your objective function to be differentiable. If your function has nasty features like kinks and discontinuities, then JuMP is likely going to struggle.</li>
 </ol>
-<p>[^1]: This is the first footnote.
-[^2]: This is the second footnote.</p>
 </div>
 </div>
 </div>

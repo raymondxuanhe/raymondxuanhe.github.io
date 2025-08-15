@@ -7517,17 +7517,7 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="A-practical-introduction-to-Value-Function-Iteration">A practical introduction to Value Function Iteration<a class="anchor-link" href="#A-practical-introduction-to-Value-Function-Iteration">¶</a></h1><p>This Julia notebook is intended to serve as an introduction to using value function iteration to solve recursive dynamic economic models. I assume that you already know the deterministic neoclassical growth model and have been exposed to dynamic programming, so today's focus will solely be on writing code to solve it. Throughout my exposition, I will try to explain as many `non-obvious' lines of code or choices as possible, with a heavy emphasis on what practical issue they address, especially when the problem we are solving stops becoming well-behaved like this one.</p>
-</div>
-</div>
-</div>
-</div>
-<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=90bb7884">
-<div class="jp-Cell-inputWrapper" tabindex="0">
-<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
-</div>
-<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
-</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h1 id="A-practical-introduction-to-Value-Function-Iteration-(VFI)">A practical introduction to Value Function Iteration (VFI)<a class="anchor-link" href="#A-practical-introduction-to-Value-Function-Iteration-(VFI)">¶</a></h1><p>This Julia notebook is intended to serve as an introduction to using VFI to solve recursive dynamic economic models. I assume that you already know the deterministic neoclassical growth model and have been exposed to dynamic programming, so today's focus will solely be on writing code to solve it. Throughout my exposition, I will try to explain as many `non-obvious' lines of code or choices as possible, with a heavy emphasis on what practical issue they address, especially when the problem we are solving stops becoming well-behaved like this one.</p>
 <h1 id="1.-Initialization">1. Initialization<a class="anchor-link" href="#1.-Initialization">¶</a></h1><p>We first need to load all the packages and initialize all the objects that we will be using throughout the rest of the code. This includes our parameters (both economic and numerical) and functions.</p>
 </div>
 </div>
@@ -7611,7 +7601,17 @@ Of course, the moment we depart from this parameterization, our analytical bench
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="1.2-Creating-the-state-space-(grid)">1.2 Creating the state-space (grid)<a class="anchor-link" href="#1.2-Creating-the-state-space-(grid)">¶</a></h2><p>Next, we create our state-space. Mathematically our state-space is continuous with infinitely-many elements. However, this is impossible to store on our computer, much less perform complicated calculations on. In practice, we substitute this with a discrete grid of points (with finitely many elements) which in this case, is a 90-element vector from 0.001 to 90.0.</p>
+<h2 id="1.2-Creating-the-state-space-(grid)">1.2 Creating the state-space (grid)<a class="anchor-link" href="#1.2-Creating-the-state-space-(grid)">¶</a></h2><p>Next, we create our state-space. Mathematically our state-space is continuous with infinitely-many elements. However, this is impossible to store on our computer, not to mention perform complicated calculations on. In practice, we substitute this with a discrete grid of points (with finitely many elements) which in this case, is a 101-element vector of points for capital from 0.0 to 90.0.</p>
+<h3 id="Aside---interpolation-vs-discrete-state-space-(DSS)">Aside - interpolation vs discrete state space (DSS)<a class="anchor-link" href="#Aside---interpolation-vs-discrete-state-space-(DSS)">¶</a></h3><p>Most introductions to VFI are done with a purely discretized state-space with no interpolation at all. The main difference that this results in is that the later maximization step gets replaced with a grid-search. I.e. instead of using optimizers on a continuous function, we instead evaluate the objective function along a finite number of possible choices and pick the choice that results in the largest number. There are two major benefits to the DSS approach:</p>
+<ol>
+<li>Simplicity - finidng the maximum among a row with finitely-many elements is much simpler (and possibly faster) than invoking optimizers.</li>
+<li>Stability - a significant source of instability for interpolation is that algorithms usually want to engage in <strong>extrapolation</strong>, especially at the boundaries of the grid. However, extrapolation can result in extreme instability since there are no economic conditions to impose in the extrapolated region by construction. There are ways to side-step this, but they introduce risks.</li>
+</ol>
+<p>However, there are also some major downsides to this approach (and ultimately why I prefer to teach with interpolation)</p>
+<ol>
+<li>Speed/accuracy - holding the desired level of accuracy constant, DSS requires far more gridpoints for the result of the maximization step to not be the result of <strong>rounding error</strong>. Suppose that the true optimal choice for $k^\prime$ at $k = 20.0$ is $k^\prime = 15.4$, but your grid is only defined on $...15.0, 16.0, ...$. Purely discretizing the state space will result in $k^\prime = 15.0$ being chosen, as it is the local maxima among a finite set of points - the value function isn't defined at $15.4$! You would need to increase the fineness of your grid to avoid that $0.4$ rounding error, thereby increasing computational cost. Meanwhile, interpolating between gridpoints results in the value function being defined at 15.4, even if your gridpoints are defined on $...10.0, 20.0...$. (This doesn't mean that there aren't any approximation errors though! E.g. your choice of basis functions might result in 15.35 being chosen as the optimum.)</li>
+<li>Speed - VFI is very slow, especially if your state-space is high dimensional. This is irrespective of whether you interpolate your desired functions or not. I will go over algorithms that are MUCH faster (and more accurate) in future notebooks, but they only work with fully continuous functions, which DSS does not permit.</li>
+</ol>
 </div>
 </div>
 </div>
@@ -7623,9 +7623,9 @@ Of course, the moment we depart from this parameterization, our analytical bench
 <div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-julia"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">kmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-3</span><span class="p">;</span>
+<div class="highlight hl-julia"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">kmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.0</span><span class="p">;</span>
 <span class="k">const</span><span class="w"> </span><span class="n">kmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">90.0</span><span class="p">;</span>
-<span class="k">const</span><span class="w"> </span><span class="n">nk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1_000</span><span class="p">;</span>
+<span class="k">const</span><span class="w"> </span><span class="n">nk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">101</span><span class="p">;</span>
 <span class="n">kgrid</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">kmax</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="o">=</span><span class="n">nk</span><span class="p">)</span>
 </pre></div>
 </div>
@@ -7723,7 +7723,7 @@ Of course, the moment we depart from this parameterization, our analytical bench
 <li><p>A critical issue is the bounds that we feed to the optimization algorithm. Economics tells us that as per the resource constraint, we the largest that $k^\prime$ can be is $f(k)$. Once again, there is nothing that inherently forces the optimizer to respect this limitation unless we force it to. This may become a very severe problem in the initial few iterations where our approximation of $v(k)$ is poor, a</p>
 </li>
 </ol>
-<p>In principle, this should not be an issue because based on the way the utility function is written, a massive penalty should be outputted for choices of $k^\prime$ that require negative consumption and indeed, for standard interpolation schemes like linear and cubic splines. However, when as we use more advanced tools, implementing these kinds of checks and constraints become increasingly crucial, especially when our likely poor approximation of $v(k)$ the initial few iterations can lead to non-sensical optimums.</p>
+<p>In principle, this should not be an issue because based on the way the utility function is written, a massive penalty should be outputted for choices of $k^\prime$ that require negative consumption and indeed, for standard interpolation schemes like linear and cubic splines. However, when as we use more advanced tools, implementing these kinds of checks and constraints become increasingly crucial, especially during the initial few iterations where likely poor approximation of $v(k)$ can lead to non-sensical optimums.</p>
 </div>
 </div>
 </div>
@@ -7734,7 +7734,13 @@ Of course, the moment we depart from this parameterization, our analytical bench
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="2.-Main-loop">2. Main loop<a class="anchor-link" href="#2.-Main-loop">¶</a></h2>
+<h2 id="2.-Main-loop">2. Main loop<a class="anchor-link" href="#2.-Main-loop">¶</a></h2><p>Below is the iterative loop. Once you understand the Bellman operator, the rest of this code should be fairly simple. All the loop does is:</p>
+<ol>
+<li>Input a guess of the value function (v_old)</li>
+<li>Apply the Bellman operator to it, outputting a new value function (v_new)</li>
+<li>Calculate the distance between the guess and new value function</li>
+<li>If the distance is small enough (less than tol) then declare convergence and end the loop. Otherwise, update v_old in the next iteration to be the current iteration's v_new, and repeat.</li>
+</ol>
 </div>
 </div>
 </div>
@@ -7768,6 +7774,18 @@ Of course, the moment we depart from this parameterization, our analytical bench
 <span class="k">end</span>
 </pre></div>
 </div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell jp-MarkdownCell jp-Notebook-cell" id="cell-id=c42bae53">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
+</div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
+<h2 id="2.1.-How-small-is-close-%60enough'?">2.1. How small is close `enough'?<a class="anchor-link" href="#2.1.-How-small-is-close-%60enough'?">¶</a></h2><p>In other words, what should we set the numerical tolerance parameter to? Once again, there's no single definitive number. On modern hardware (which uses 64-bit floating point representation), the absolute maximum you should set your tolerance parameter to is 10^-16, or machine epsilon, which roughly speaking is the smallest distance between two numbers that a computer can reliably distinguish. I.e. if two numbers are within machine epsilon distance of each other, the computer may think they are equivalent numbers.</p>
+<p>However, if I had to give a rule of thumb, then it is somewhere between 10^-5 to 10^-10.</p>
 </div>
 </div>
 </div>
