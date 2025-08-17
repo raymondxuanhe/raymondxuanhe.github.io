@@ -12,8 +12,8 @@ Fall 2022 & Fall 2023, Fall 2025 for Prof. Stefano Eusepi, and Fall 2024 for Pro
 
 # Notes
 * [0. Numerical tools](/files/jupyter_notebooks/0_numerical_tools.html)
-* [1. Value function iteration](/files/jupyter_notebooks/1_practical_vfi.html)
-* [2. Policy function iteration](/files/jupyter_notebooks/2_practical_pfi.html)
+* [1. Value function iteration](/files/jupyter_notebooks/1_vfi.html)
+* [2. Policy function iteration](/files/jupyter_notebooks/2_pfi.html)
 * [3. Endogenous grid method](/files/jupyter_notebooks/3_egm.html)
 
 # Teaching Evaluations
