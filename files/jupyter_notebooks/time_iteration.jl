@@ -1,6 +1,6 @@
 
 
-using Interpolations, LinearAlgebra, Roots, Plots
+using Interpolations, LinearAlgebra, Optim, Plots, Roots
 
 const β = 0.96
 const α = 0.4
@@ -15,7 +15,24 @@ u(c) = c ≥ 0.0 ? log(c) : -1e10
 u_c(c) = c ≥ 0.0 ? 1/c : 0.0
 f_k(k) = α * k^(α - 1) 
 
-function coleman_operator(polguess_V::Vector{Float64})
+function coleman_operator_optim(polguess_V::Vector{Float64})
+    polguess_F = CubicSplineInterpolation(kgrid, polguess_V)
+    Kp_V = zeros(nk)
+    for i in eachindex(kgrid)
+        k = kgrid[i]
+        function euler_eq(k′)
+            LHS = u_c(f(k) - k′)
+            c′ = f(k′) - polguess_F(k′)
+            RHS = β*f_k(k′)*u_c(c′)
+            return LHS - RHS
+        end
+        results = optimize(k′ -> euler_eq(k′)^2, kmin, f(k))
+        Kp_V[i] = results.minimizer
+    end
+    return Kp_V
+end
+
+function coleman_operator_roots(polguess_V::Vector{Float64})
     polguess_F = CubicSplineInterpolation(kgrid, polguess_V)
     Kp_V = zeros(nk)
     for i in eachindex(kgrid)
@@ -40,11 +57,11 @@ function solve_model_coleman()
 
     @time while iiter < max_iter 
         iiter += 1
-        polnew_V = coleman_operator(polguess_V)
+        polnew_V = coleman_operator_optim(polguess_V)
 
         diff = norm(polnew_V - polguess_V, Inf)
 
-#        println("Iteration $iiter, Error: $diff")
+        println("Iteration $iiter, Error: $diff")
 
         if diff < tol
             println("Converged after $iiter iterations")
@@ -58,8 +75,6 @@ end
 
 pol_V = solve_model_coleman()
 
-using Plots
-
 plot(kgrid, pol_V, label="Coleman Time Iteration", 
     xlabel="Capital", ylabel="Policy Function", 
     title="Policy Function from Coleman Time Iteration")
@@ -69,7 +84,7 @@ pol_analytical(k) = α*β*k^α
 plot!(kgrid, pol_analytical.(kgrid), label="Analytical Policy Function", 
     linestyle=:dash, color=:red)
 
-pol_F = CubicSplineInterpolation(kgrid, polguess_V)
+pol_F = CubicSplineInterpolation(kgrid, pol_V)
 
 function compute_euler_residual(k::Float64)
     k′ = pol_F(k)
