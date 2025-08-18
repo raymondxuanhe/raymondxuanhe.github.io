@@ -7517,14 +7517,14 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Policy-function-iteration-(PFI)">Policy function iteration (PFI)<a class="anchor-link" href="#Policy-function-iteration-(PFI)">¶</a></h1><p>In the previous notebook, I covered value function iteration, probably the most popular algorithm for finding the global solution to problems in macroeconomics and finance. Its popularity is due to two important factors:</p>
+<h1 id="Policy-function-iteration-(PFI)---Coleman-time-iteration">Policy function iteration (PFI) - Coleman time iteration<a class="anchor-link" href="#Policy-function-iteration-(PFI)---Coleman-time-iteration">¶</a></h1><p>In the previous notebook, I covered VFI, probably the most popular algorithm for finding the global solution to problems in macroeconomics and finance. Its popularity is due to two important factors:</p>
 <ol>
 <li><strong>Robustness/stability</strong> - VFI is is the most robust algorithm for finding global solutions. As long as Blackwell's sufficiency conditions are satisfied, then the Bellman operator is a contraction mapping, so in principle, any initial guess of the value function will eventually converge to the true and unique value function if you apply the Bellman operator enough times. Even if your model is such that Blackwell's sufficiency conditions are not met and convergence is not guaranteed, iterating on the Bellman operator is still usually the stablest procedure, since it requires the least amount of information on the problem (I will expand on this later).</li>
 <li><strong>Simplicity</strong> - of all the algorithms, VFI has the lowest programming overhead. I.e. the time it takes to translate your mathematical problem into the computer is the lowest. Moreover, VFI is also the only algorithm which can work with pure discretization and no interpolation whatsoever.</li>
 </ol>
-<p>Unfortunately, VFI has a major drawback: it is incredibly slow. This may seem strange since VFI solved the problem in about 0.6 seconds (actually, more accurate benchmarking shows it was about 0.424 seconds). However, it is important to compare <strong>relative</strong> time instead of <strong>absolute</strong> time when benchmarking, especially as the problem you're solving grows.</p>
-<p>Iterating on the Bellman operator usually means you get the approximate <em>shape</em> of the true value function fairly quickly, but getting the value function correct in the <em>levels</em> can be require many (hundreds) of iterations, especially if your discount factor is close to 1. Moreover, each iteration is relatively slow - since optimizing a function is usually a very computationally costly step and can require many function evaluations within each step.</p>
-<p>Fortunately, there are two other ways of solving recursive problems and they are both significantly faster than VFI. They are Coleman time-iteration, and the endogenous grid method, and they both involve iterating the policy function on the Euler equation instead of the value function on the Bellman equation.</p>
+<p>Unfortunately, VFI has a major drawback: it is incredibly slow. This may seem strange since VFI solved the problem in about 0.6 seconds (actually, more accurate benchmarking shows it was about 0.424 seconds). However, it is important to compare <strong>relative</strong> time instead of <strong>absolute</strong> time when benchmarking, and I will show you algorithms that significantly faster. In this simple context, a speed improvement of an order of magnitude is still only a few miliseconds in absolute terms. Yet, as your model increases in size, this very will quickly balloon to minutes or entire hours saved - especially if you are trying to do some form of formal structural estimation.</p>
+<p>Iterating on the Bellman operator usually means you get the approximate <em>shape</em> of the true value function fairly quickly, but getting the value function correct in the <em>levels</em> can require many (hundreds) of iterations, especially if your discount factor is close to 1. Moreover, each iteration is relatively slow - since optimizing a function is usually a very computationally costly step and can require many function evaluations within each step.</p>
+<p>Fortunately, there are two other ways of solving recursive problems and they are both significantly faster than VFI. They are Coleman time-iteration, and the endogenous grid method, and they both involve iterating the <strong>policy function</strong> on the Euler equation instead of the value function on the Bellman equation.</p>
 <h1 id="0.-Introduction">0. Introduction<a class="anchor-link" href="#0.-Introduction">¶</a></h1><p>At the end of the notebook on VFI, I showed how the Euler equation can be used to assess a numerical policy function's accuracy. Fortunately, it turns out that the Euler equation can also be used to <strong>find</strong> the policy function itself! The main conceptual difference between PFI and VFI is that while the latter involves iterating guesses of the value function on the Bellman equation, PFI requires iterating guesses of the policy function on the Euler equation.</p>
 <p>The iterative procedure is the following:</p>
 <ol>
@@ -7711,7 +7711,7 @@ Converged after 20 iterations
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Incredibly, PFI managed to find the policy function in just 20 iterations as opposed to 455, resulting in the time-to-compute dropping from about 424 miliseconds to just 76!</p>
+<p>Incredibly, Coleman time-iteration managed to find the policy function in just 20 iterations as opposed to 455, resulting in the time-to-compute dropping from about 424 miliseconds to just 76!</p>
 </div>
 </div>
 </div>
@@ -7731,15 +7731,15 @@ Converged after 20 iterations
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-julia"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="s">"Coleman Time Iteration"</span><span class="p">,</span><span class="w"> </span>
-<span class="w">    </span><span class="n">xlabel</span><span class="o">=</span><span class="s">"Capital"</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">"Policy Function"</span><span class="p">)</span>
+<div class="highlight hl-julia"><pre><span></span><span class="n">plot</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span><span class="p">,</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="s">"Coleman time iteration"</span><span class="p">,</span><span class="w"> </span>
+<span class="w">    </span><span class="n">xlabel</span><span class="o">=</span><span class="s">"Capital"</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="o">=</span><span class="s">"g(k)"</span><span class="p">)</span>
 
 <span class="n">pol_analytical</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">α</span><span class="o">*</span><span class="n">β</span><span class="o">*</span><span class="n">k</span><span class="o">^</span><span class="n">α</span>
 
-<span class="n">plot!</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">pol_analytical</span><span class="o">.</span><span class="p">(</span><span class="n">kgrid</span><span class="p">),</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="s">"Analytical Policy Function"</span><span class="p">,</span><span class="w"> </span>
+<span class="n">plot!</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">pol_analytical</span><span class="o">.</span><span class="p">(</span><span class="n">kgrid</span><span class="p">),</span><span class="w"> </span><span class="n">label</span><span class="o">=</span><span class="s">"Analytical policy function"</span><span class="p">,</span><span class="w"> </span>
 <span class="w">    </span><span class="n">linestyle</span><span class="o">=</span><span class="ss">:dash</span><span class="p">,</span><span class="w"> </span><span class="n">color</span><span class="o">=</span><span class="ss">:red</span><span class="p">)</span>
 </pre></div>
 </div>
