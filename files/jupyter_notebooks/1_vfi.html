@@ -7517,8 +7517,8 @@ a.anchor-link {
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h1 id="Value-Function-Iteration-(VFI)">Value Function Iteration (VFI)<a class="anchor-link" href="#Value-Function-Iteration-(VFI)">¶</a></h1><p>This notebook is intended to serve as an introduction to using VFI to solve recursive dynamic economic models. I assume that you already know the deterministic neoclassical growth model and have been exposed to dynamic programming, so today's focus will solely be on writing code to solve it. Throughout my exposition, I will try to explain as many `non-obvious' lines of code or choices as possible, with an emphasis on what practical issue(s) they address or will address when the problem becomes more challenging.</p>
-<h1 id="0.-Introduction">0. Introduction<a class="anchor-link" href="#0.-Introduction">¶</a></h1><p>To fix notation and ground ideas, I first present the deterministic neoclassical growth model which the following code will be solving. The social planner's problem is characterized by the following Bellman equation:
+<h1 id="Value-Function-Iteration-(VFI)">Value Function Iteration (VFI)<a class="anchor-link" href="#Value-Function-Iteration-(VFI)">¶</a></h1><p>This notebook is intended to serve as an introduction to using VFI to solve recursive dynamic economic models. I assume that you already know the deterministic neoclassical growth model and have been exposed to dynamic programming, so today's focus will solely be on writing code to find numerical solutions. Throughout my exposition, I will try to explain as many `non-obvious' lines of code or choices as possible, with an emphasis on what practical issue(s) they address or will address when the problem becomes more challenging.</p>
+<h1 id="0.-Introduction">0. Introduction<a class="anchor-link" href="#0.-Introduction">¶</a></h1><p>To fix notation and ground ideas, here is the deterministic neoclassical growth model which the following code will be solving. The social planner's problem is characterized by the following Bellman equation:
 $$
 V(k) = \max_{\left\{k^{\prime}\right\}} \left\{u(c) + \beta V(k^{\prime})\right\},
 $$
@@ -7546,13 +7546,12 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Interpolations</span>
 <span class="k">using</span><span class="w"> </span><span class="n">Optim</span>
 <span class="k">using</span><span class="w"> </span><span class="n">LinearAlgebra</span>
-<span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
 
 <span class="k">const</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.96</span>
 <span class="k">const</span><span class="w"> </span><span class="n">α</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.4</span>
@@ -7621,7 +7620,7 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">kmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-3</span><span class="p">;</span>
@@ -7698,7 +7697,7 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">vguess_V</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Float64</span><span class="p">})</span>
@@ -7776,7 +7775,7 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="n">iiter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
@@ -7822,7 +7821,7 @@ Iteration: 300, Error: 5.489794297375283e-6
 Iteration: 350, Error: 7.132181067959209e-7
 Iteration: 400, Error: 9.284469371095838e-8
 Iteration: 450, Error: 1.2260393589258456e-8
-  0.593270 seconds (1.24 M allocations: 97.587 MiB, 1.14% gc time, 15.24% compilation time: 2% of which was recompilation)
+  0.509889 seconds (920.02 k allocations: 80.572 MiB, 0.99% gc time)
 </pre>
 </div>
 </div>
@@ -7835,7 +7834,7 @@ Iteration: 450, Error: 1.2260393589258456e-8
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Here, you can see that after about 455 iterations on the Bellman operator, the value function has converged to a tolerance of $10^{-8}$ in about 0.6 seconds. (Always print diagnostic information so that you can keep track of whether your algorithm is converging or diverging in real-time.)</p>
+<p>Here, you can see that after about 455 iterations on the Bellman operator, the value function has converged to a tolerance of $10^{-8}$ in about 0.5 seconds. (Always print diagnostic information so that you can keep track of whether your algorithm is converging or diverging in real-time.)</p>
 <h2 id="3.1.-How-small-is-close-%60enough'?">3.1. How small is close `enough'?<a class="anchor-link" href="#3.1.-How-small-is-close-%60enough'?">¶</a></h2><p>How close does the value function between each iteration need to be for us to declare convergence? In other words, what should we set the numerical tolerance parameter to?</p>
 <p>Once again, there's no single definitive number. On modern hardware (which uses 64-bit floating point representation), the absolute maximum you should set your tolerance parameter to is 10^-16, or machine epsilon, which roughly speaking is the smallest distance between two numbers that a computer can reliably distinguish. I.e. if two numbers are within machine epsilon distance of each other, the computer may think they are equivalent numbers. Conversely, I have yet to see a literature where the accepted threshold is greater than 10^-4.</p>
 <p>Heuristically, you can start being confident that your solution is accurate enough when lowering the tolerance threshold results in the value and policy functions not changing meaningfully.</p>
@@ -7848,7 +7847,7 @@ Iteration: 450, Error: 1.2260393589258456e-8
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">v_analytical</span><span class="p">(</span><span class="n">k</span><span class="o">::</span><span class="kt">Float64</span><span class="p">)</span>
@@ -7891,7 +7890,7 @@ Iteration: 450, Error: 1.2260393589258456e-8
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Here, you can see that the two value functions are virtually completely indistinguishable, indicating that the numerical solution is very accurate. Let's see the policy function for $k^\prime$ has fared:</p>
+<p>Here, you can see that the two value functions are virtually completely visually indistinguishable, indicating that the numerical value function is very accurate. Let's see the policy function for $k^\prime$ has fared:</p>
 </div>
 </div>
 </div>
@@ -7900,7 +7899,7 @@ Iteration: 450, Error: 1.2260393589258456e-8
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="n">pol_F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearInterpolation</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span><span class="p">)</span>
@@ -7938,17 +7937,17 @@ Iteration: 450, Error: 1.2260393589258456e-8
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>While the numerical policy function for $k^\prime$ looks reasonably close to the true policy function, there is alot of jaggedness. This is due to using linear interpolation to approximate the value function between gridpoints, which produces non-differentiable kinks at each gridpoint. In fact, there is a formal way of assessing how accurate the policy function.</p>
-<h1 id="4.-Euler-Residuals">4. Euler Residuals<a class="anchor-link" href="#4.-Euler-Residuals">¶</a></h1><p>In equilibrium, we know that the policy function for next period's capital, $k^\prime = g(k)$, must satisfy the following inter-temporal optimality condition or the Euler equation:
+<p>While the numerical policy function for $k^\prime$ looks reasonably close to the true policy function, there is alot of unappealing jaggedness. This is due to the value function being approximated with <strong>linear</strong> splines, which produces non-differentiable kinks at each gridpoint. In fact, there is a formal way of assessing how accurate the policy function is.</p>
+<h1 id="4.-Euler-Residuals">4. Euler Residuals<a class="anchor-link" href="#4.-Euler-Residuals">¶</a></h1><p>In equilibrium, we know that the policy function for next period's capital, $k^\prime = g(k)$, must satisfy the following inter-temporal optimality condition (or the Euler equation):
 $$
 u_c(f(k) - k^\prime) = \beta f_k (k^\prime) u_c(f(k^\prime) - k^{\prime\prime})
 $$
-or written in a way that makes the functional dependencies clear:
+or written in a way that makes the functional dependencies explicit:
 $$
 u_c[f(k) - g(k)] = \beta f_k (g(k)) u_c[f(g(k)) - g(g(k))]
 $$
 where $u_c(c) = 1/c$ and $f_k(k) = \alpha k^{\alpha-1}$.</p>
-<p>If our numerical policy function was exactly correct, then the Euler equation should hold exactly at every single point across the state-space. Thus, one way to assess our solution's accuracy is to substitute the policy function in at many points (especially off-grid), compute the residuals at each point, i.e.
+<p>If our numerical policy function was exactly correct, then the Euler equation should hold <strong>exactly</strong> at every single point across the state-space. Thus, one way to assess our solution's accuracy is to substitute the policy function in at many points (especially off-grid), compute the Euler residuals at each point, i.e.
 $$
 \text{euler-residual}(k_i) = \frac{u_c[f(k_i) - g(k_i)]}{\beta f_k (g(k_i)) u_c[f(g(k_i)) - g(g(k_i))]} - 1
 $$
@@ -7961,7 +7960,7 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Statistics</span>
@@ -8004,16 +8003,28 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 </div>
 </div>
 </div>
-</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell jp-mod-noOutputs" id="cell-id=3ed425ad">
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=3ed425ad">
 <div class="jp-Cell-inputWrapper" tabindex="0">
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="n">mean</span><span class="p">(</span><span class="n">errors_V</span><span class="p">)</span>
 </pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>-1.9358814855090438</pre>
 </div>
 </div>
 </div>
@@ -8025,8 +8036,8 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>While not absolutely terrible, a mean residual residual of greater than $-2$ is not ideal, especially in a well-behaved problem like this one. One way to improve the accuracy of our solution is to increase the number of gridpoints. A more efficient strategy would be to observe that both the value function and the policy function are quite smooth in $k$, suggesting that interpolating with cubic splines may lead to higher accuracy.</p>
-<p>Below is my Julia code for solving the model with cubic splines, and written in a way that is optimized for Julia.</p>
+<p>While not absolutely terrible, a mean residual residual of greater than $-2$ is not ideal. One natural way to improve the accuracy of our solution is to increase the number of gridpoints.</p>
+<p>However, a computationally more efficient alternative would be to observe that both the value function and the policy function are smooth in $k$, suggesting that <strong>cubic</strong> splines might be a more fitting family of basis functions than <strong>linear</strong> splines. Below is my code for solving the model with cubic splines - it is written in a way that is optimized for Julia.</p>
 </div>
 </div>
 </div>
@@ -8035,7 +8046,7 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Interpolations</span>
@@ -8121,7 +8132,6 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 <span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
 <span class="n">kfine_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">.</span><span class="n">kmax</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="o">=</span><span class="w"> </span><span class="mi">5_001</span><span class="p">)</span>
 
-
 <span class="n">pol_F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CubicSplineInterpolation</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span><span class="p">)</span>
 
 <span class="k">function</span><span class="w"> </span><span class="n">pol_F_analytical</span><span class="p">(</span><span class="n">k</span><span class="o">::</span><span class="kt">Float64</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">::</span><span class="kt">Params</span><span class="p">)</span>
@@ -8184,7 +8194,7 @@ Iteration: 450, Error: 1.1983821934791195e-8
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">compute_euler_residual</span><span class="p">(</span><span class="n">k</span><span class="o">::</span><span class="kt">Float64</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">::</span><span class="kt">Params</span><span class="p">)</span>
@@ -8223,7 +8233,7 @@ Iteration: 450, Error: 1.1983821934791195e-8
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="n">mean</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
