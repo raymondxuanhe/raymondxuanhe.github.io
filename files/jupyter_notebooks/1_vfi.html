@@ -7546,7 +7546,7 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Interpolations</span>
@@ -7582,7 +7582,7 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Note that I am declaring the parameters in an interpreted way, i.e. everything is declared line-by-line. For interpreted languages like MATLAB and Python, this is what we would do anyway. However, Julia is a compiled language, which means that the overwhelming majority of our code should be written in a function or housed inside a struct. Since I am prioritizing expository clarity and performance is not crucial here, this is fine for now, but just know that there are much better ways to do this.</p>
+<p>Note that I am declaring the parameters in an interpreted way, i.e. everything is declared line-by-line. For interpreted languages like MATLAB and Python, this is what we would do anyway. However, Julia is a compiled language, which means that the overwhelming majority of our code should be written in a function or housed inside a struct (more on this in the next notebook). Since I am prioritizing expository clarity and performance is not crucial here, this is fine for now.</p>
 <p>Declaring our parameters to be a constant is not strictly necessary either. However, it is a minor optimization because it tells Julia's compiler that this parameter will not change.</p>
 </div>
 </div>
@@ -7620,7 +7620,7 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">const</span><span class="w"> </span><span class="n">kmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-3</span><span class="p">;</span>
@@ -7670,6 +7670,7 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
 <h2 id="2.-Bellman-operator">2. Bellman operator<a class="anchor-link" href="#2.-Bellman-operator">¶</a></h2><p>Now that we have initialized all our parameters, auxiliary functions and created the state space, the only thing left to do before putting everything togeter into an iterative loop is to create a function for the Bellman operator.</p>
+<p>This is arguably the most important part of the code, so make sure you understand it!</p>
 <p>The function performs the following steps:</p>
 <ol>
 <li>Inputs the previous guess of the value function (a vector of the guessed value function evaluated at the corresponding points in the state space is).</li>
@@ -7681,14 +7682,13 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <h3 id="Aside---interpolation-vs-discrete-state-space-(DSS)">Aside - interpolation vs discrete state space (DSS)<a class="anchor-link" href="#Aside---interpolation-vs-discrete-state-space-(DSS)">¶</a></h3><p>Most introductions to VFI are done with a purely discretized state-space with no interpolation at all. The main difference that this results in is that the later maximization step gets replaced with a grid-search. I.e. instead of using optimizers on a continuous function, we instead evaluate the objective function along a finite number of possible choices and pick the choice that results in the largest number. There are two major benefits to the DSS approach:</p>
 <ol>
 <li><strong>Simplicity</strong> - finidng the maximum among a row with finitely-many elements is much simpler (and possibly faster) than invoking optimizers.</li>
-<li><strong>Stability</strong> - a significant source of instability for interpolation is that algorithms usually want to engage in <strong>extrapolation</strong>, especially at the boundaries of the grid. Extrapolation can result in extreme instability since there are no economic conditions to impose in the extrapolated region by construction. There are ways to side-step this, but they introduce risks.</li>
+<li><strong>Stability</strong> - a significant source of instability for interpolation is that algorithms usually want to engage in <strong>extrapolation</strong>, especially at the boundaries of the grid. Extrapolation can result in extreme instability since there are no economic conditions to impose in the extrapolated region by construction. There are ways to side-step this, but they can introduce other issues.</li>
 </ol>
 <p>However, there are also some major downsides to this approach (and ultimately why I prefer to teach VFI with interpolation)</p>
 <ol>
 <li><strong>Speed/accuracy</strong> - holding the desired level of accuracy constant, DSS requires far more gridpoints for the result of the maximization step to not be the result of <strong>rounding error</strong>. Suppose that the true optimal choice for $k^\prime$ at $k = 20.0$ is $k^\prime = 15.4$, but your grid is only defined on $...15.0, 16.0, ...$. Purely discretizing the state space will result in $k^\prime = 15.0$ being chosen, as it is the local maxima among a finite set of points - the value function isn't defined at $15.4$! You would need to increase the fineness of your grid to avoid that $0.4$ rounding error, thereby increasing computational cost. Meanwhile, interpolating between gridpoints results in the value function being defined at 15.4, even if your gridpoints are defined on $...10.0, 20.0...$. (This doesn't mean that there aren't any approximation errors though! E.g. your choice of basis functions might result in 15.35 being chosen as the optimum.)</li>
 <li><strong>Speed</strong> - VFI is very slow, especially if your state-space is high dimensional. (This is irrespective of whether you interpolate your desired functions or not.) I will go over algorithms that are MUCH faster (and more accurate) in future notebooks, but they only work with fully continuous functions, which DSS does not permit.</li>
 </ol>
-<p>This is arguably the most important part of the code, so make sure you understand it!</p>
 </div>
 </div>
 </div>
@@ -7697,22 +7697,22 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [3]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">vguess_V</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Float64</span><span class="p">})</span>
-<span class="w">    </span><span class="n">vguess_F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearInterpolation</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">vguess_V</span><span class="p">)</span>
-<span class="w">    </span><span class="n">Tv_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
-<span class="w">    </span><span class="n">pol_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
+<div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">valueV_old</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Float64</span><span class="p">})</span>
+<span class="w">    </span><span class="n">valueF_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearInterpolation</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">valueV_old</span><span class="p">)</span>
+<span class="w">    </span><span class="n">valueV_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
+<span class="w">    </span><span class="n">polV_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
 <span class="w">    </span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">eachindex</span><span class="p">(</span><span class="n">kgrid</span><span class="p">)</span>
 <span class="w">        </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kgrid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="w">        </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimize</span><span class="p">(</span><span class="n">k′</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k′</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">vguess_F</span><span class="p">(</span><span class="n">k′</span><span class="p">),</span><span class="w"> </span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
-<span class="w">        </span><span class="n">Tv_V</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">results</span><span class="o">.</span><span class="n">minimum</span>
-<span class="w">        </span><span class="n">pol_V</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">results</span><span class="o">.</span><span class="n">minimizer</span>
+<span class="w">        </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimize</span><span class="p">(</span><span class="n">k′</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k′</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">valueF_old</span><span class="p">(</span><span class="n">k′</span><span class="p">),</span><span class="w"> </span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+<span class="w">        </span><span class="n">valueV_new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">results</span><span class="o">.</span><span class="n">minimum</span>
+<span class="w">        </span><span class="n">polV</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">results</span><span class="o">.</span><span class="n">minimizer</span>
 <span class="w">    </span><span class="k">end</span>
 
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Tv_V</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">valueV_new</span><span class="p">,</span><span class="w"> </span><span class="n">polV</span>
 <span class="k">end</span>
 </pre></div>
 </div>
@@ -7743,13 +7743,14 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <li><strong>Bounds</strong></li>
 </ol>
 <p>A particularly critical issue are the bounds that we let the optimizer pick between for $k^\prime$. For the lower-bound, there is no such thing as negative capital. However, I still restrict it to the lower bound of the state-space (which ideally, should be close to 0 anyway), since I do not want to allow for extrapolation.</p>
-<p>For the upper bound, the resource constraint tells us that the largest $k^\prime$ can be is $f(k)$. Note that rather placing two ad-hoc bounds for every point in the state space, this code is written such that the bounds that the optimizier is forced to respect endogenously changes with each different value of $k$ in the loop!</p>
+<p>For the upper bound, the resource constraint tells us that the largest $k^\prime$ can be is $f(k)$. Note that rather placing two ad-hoc bounds for every point in the state space, this code is written such that the bounds that the optimizier is forced to respect will <strong>endogenously</strong> with each different value of $k$ in the loop!</p>
 <p>It is always good practice to impose as much economic structure into these numerical routines as possible. Firstly, it results in higher efficiency - there's no point asking the optimizer to trial $k^\prime = 100$ when the highest $k^\prime$ can possible be is say...$5$. Secondly, this improves numerical stability by further ruling out the possibility of results that require negative consumption.</p>
 <p>In principle, this should not be an issue because the utility function attaches any such choices with a massive penalty. Indeed, in well-behaved problems like this, and using standard interpolation schemes like linear and cubic splines, the safeguard in the utility function should be enough. Yet, when you advance to more difficult problems which require far more exotic (and often unstable) tools to solve, it becomes possible for the optimizer to pick non-sensical choices of $k^\prime$ despite the aforementioned massive penalty - especially in the initial few iterations where your approximation of $v(k)$ is probably poor.</p>
 <ol start="2">
-<li><strong>Notation</strong></li>
+<li><strong>Naming</strong></li>
 </ol>
-<p>When coding, it is good practice to name your objects in a way that makes it obvious what it is. E.g. I attach a V/M/A suffix if the object is a vector, matrix, or array respectively, and F if the object is a function. Especially in large-scale projects, these conventions make your code much more readable for everyone (including yourself!)</p>
+<p>When coding, it is good practice to name your objects in a way that makes it obvious what it is. E.g. I attach a V/M/A suffix if the object is a vector, matrix, or array respectively, and F if the object is a function. These conventions make your code much more readable for everyone (including yourself!), especially in large-scale projects!</p>
+<p>In iterative algorithms like VFI, where there are two versions of the same object to keep track of (i.e. 2 value functions in this case), I also highly advise you to name them accordingly, so readability improves and you don't make mistakes like updating/using the wrong version of the object.</p>
 </div>
 </div>
 </div>
@@ -7760,7 +7761,7 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<h2 id="3.-Main-loop">3. Main loop<a class="anchor-link" href="#3.-Main-loop">¶</a></h2><p>Now that we have all the required objects, the final step is to put everything together into an iterative loop that will hopefully eventually lead to the solution.Once you understand the Bellman operator, the rest of this code should be fairly simple. All the loop does is:</p>
+<h2 id="3.-Main-loop">3. Main loop<a class="anchor-link" href="#3.-Main-loop">¶</a></h2><p>Now that we have all the required objects, the final step is to put everything together into an iterative loop that will hopefully eventually lead to the solution. Once you understand the Bellman operator, the rest of this code should be fairly simple. All the loop does is:</p>
 <ol>
 <li>Take in an initial guess of the value function (v_old)</li>
 <li>Apply the Bellman operator to it, outputting a new value function (v_new)</li>
@@ -7775,30 +7776,31 @@ Of course, this analytical benchmark disappears the moment we depart from this p
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="n">iiter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="p">;</span>
 <span class="n">max_iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">600</span><span class="p">;</span>
 <span class="n">tol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-8</span><span class="p">;</span>
 
-<span class="n">pol_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
-<span class="n">vguess_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="o">.</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
+<span class="n">polV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
+<span class="n">valueV_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="o">.</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
 
 <span class="nd">@time</span><span class="w"> </span><span class="k">while</span><span class="w"> </span><span class="n">iiter</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">max_iter</span>
 <span class="w">    </span><span class="n">iiter</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
 
-<span class="w">    </span><span class="n">vnew_V</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">vguess_V</span><span class="p">)</span>
+<span class="w">    </span><span class="n">valueV_new</span><span class="p">,</span><span class="w"> </span><span class="n">polV_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">valueV_old</span><span class="p">)</span>
 
-<span class="w">    </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">vnew_V</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">vguess_V</span><span class="p">,</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span>
+<span class="w">    </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">valueV_new</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">valueV_old</span><span class="p">,</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">iiter</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">        </span><span class="n">println</span><span class="p">(</span><span class="s">"Iteration: </span><span class="si">$iiter</span><span class="s">, Error: </span><span class="si">$diff</span><span class="s">"</span><span class="p">)</span>
 <span class="w">    </span><span class="k">end</span>
+<span class="w">    </span>
+<span class="w">    </span><span class="n">valueV_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">copy</span><span class="p">(</span><span class="n">valueV_new</span><span class="p">)</span>
+<span class="w">    </span>
 <span class="w">    </span><span class="k">if</span><span class="w"> </span><span class="n">diff</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">tol</span>
 <span class="w">        </span><span class="k">break</span>
 <span class="w">    </span><span class="k">end</span>
-
-<span class="w">    </span><span class="n">vguess_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">copy</span><span class="p">(</span><span class="n">vnew_V</span><span class="p">)</span>
 <span class="k">end</span>
 </pre></div>
 </div>
@@ -7821,7 +7823,7 @@ Iteration: 300, Error: 5.489794297375283e-6
 Iteration: 350, Error: 7.132181067959209e-7
 Iteration: 400, Error: 9.284469371095838e-8
 Iteration: 450, Error: 1.2260393589258456e-8
-  0.509889 seconds (920.02 k allocations: 80.572 MiB, 0.99% gc time)
+  0.505805 seconds (1.60 M allocations: 90.960 MiB, 0.99% gc time)
 </pre>
 </div>
 </div>
@@ -7847,7 +7849,7 @@ Iteration: 450, Error: 1.2260393589258456e-8
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [7]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">v_analytical</span><span class="p">(</span><span class="n">k</span><span class="o">::</span><span class="kt">Float64</span><span class="p">)</span>
@@ -7856,8 +7858,8 @@ Iteration: 450, Error: 1.2260393589258456e-8
 
 <span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
 
-<span class="n">value_F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearInterpolation</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">vguess_V</span><span class="p">)</span>
-<span class="n">kfine_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">kmax</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="o">=</span><span class="mi">5_001</span><span class="p">)</span>
+<span class="n">value_F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearInterpolation</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">valueV_old</span><span class="p">)</span>
+<span class="n">kfine_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">kmax</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">5_001</span><span class="p">)</span>
 
 <span class="n">plot</span><span class="p">(</span><span class="n">kfine_V</span><span class="p">,</span><span class="w"> </span><span class="n">value_F</span><span class="o">.</span><span class="p">(</span><span class="n">kfine_V</span><span class="p">),</span>
 <span class="w">    </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Value function from VFI"</span><span class="p">,</span>
@@ -7899,10 +7901,10 @@ Iteration: 450, Error: 1.2260393589258456e-8
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [8]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-julia"><pre><span></span><span class="n">pol_F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearInterpolation</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span><span class="p">)</span>
+<div class="highlight hl-julia"><pre><span></span><span class="n">pol_F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">LinearInterpolation</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">polV</span><span class="p">)</span>
 
 <span class="n">plot</span><span class="p">(</span><span class="n">kfine_V</span><span class="p">,</span><span class="w"> </span><span class="n">pol_F</span><span class="o">.</span><span class="p">(</span><span class="n">kfine_V</span><span class="p">),</span>
 <span class="w">    </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Policy function from VFI"</span><span class="p">,</span>
@@ -7949,9 +7951,14 @@ $$
 where $u_c(c) = 1/c$ and $f_k(k) = \alpha k^{\alpha-1}$.</p>
 <p>If our numerical policy function was exactly correct, then the Euler equation should hold <strong>exactly</strong> at every single point across the state-space. Thus, one way to assess our solution's accuracy is to substitute the policy function in at many points (especially off-grid), compute the Euler residuals at each point, i.e.
 $$
-\text{euler-residual}(k_i) = \frac{u_c[f(k_i) - g(k_i)]}{\beta f_k (g(k_i)) u_c[f(g(k_i)) - g(g(k_i))]} - 1
+\text{euler-residual}(k_i) = \log_{10} \left|\frac{f(k_i) - g(k_i)}{u_c^{-1}\left[\beta f_k (g(k_i)) u_c[f(g(k_i)) - g(g(k_i))]\right]} - 1 \right|
 $$
-and assess the distribution of the absolute value of the errors in log-10 space.</p>
+and assess the distribution.</p>
+<p>This formulation of the errors has two important benefits:</p>
+<ol>
+<li>The Euler residuals now have an intuitive interpretation - if your residual was $x$, this means that the agent is making a $1 mistake for every $10^{-x}$ dollars.</li>
+<li>They are unit-free.</li>
+</ol>
 </div>
 </div>
 </div>
@@ -7960,14 +7967,14 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [9]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [15]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Statistics</span>
 
-<span class="k">function</span><span class="w"> </span><span class="n">u_c</span><span class="p">(</span><span class="n">c</span><span class="o">::</span><span class="kt">Float64</span><span class="p">)</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="n">c</span>
-<span class="k">end</span>
+<span class="n">u_c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">≥</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="n">c</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">1e10</span>
+
+<span class="n">u_c_inv</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="n">c</span><span class="w"> </span><span class="o">≥</span><span class="w"> </span><span class="mf">0.0</span><span class="w"> </span><span class="o">?</span><span class="w"> </span><span class="mi">1</span><span class="o">/</span><span class="n">c</span><span class="w"> </span><span class="o">:</span><span class="w"> </span><span class="o">-</span><span class="mf">1e10</span>
 
 <span class="k">function</span><span class="w"> </span><span class="n">f_k</span><span class="p">(</span><span class="n">k</span><span class="o">::</span><span class="kt">Float64</span><span class="p">)</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">α</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">k</span><span class="o">^</span><span class="p">(</span><span class="n">α</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">)</span>
@@ -7976,11 +7983,10 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 <span class="k">function</span><span class="w"> </span><span class="n">compute_euler_residual</span><span class="p">(</span><span class="n">k</span><span class="o">::</span><span class="kt">Float64</span><span class="p">)</span>
 <span class="w">    </span><span class="n">k′</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pol_F</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 <span class="w">    </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k′</span>
-<span class="w">    </span><span class="n">LHS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u_c</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
 <span class="w">    </span><span class="n">k′′</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pol_F</span><span class="p">(</span><span class="n">k′</span><span class="p">)</span>
 <span class="w">    </span><span class="n">c′</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">k′</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k′′</span>
 <span class="w">    </span><span class="n">RHS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">f_k</span><span class="p">(</span><span class="n">k′</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u_c</span><span class="p">(</span><span class="n">c′</span><span class="p">)</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">log10</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">LHS</span><span class="o">/</span><span class="n">RHS</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">log10</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">u_c_inv</span><span class="p">(</span><span class="n">RHS</span><span class="p">)</span><span class="o">/</span><span class="n">c</span><span class="p">)))</span>
 <span class="k">end</span>
 
 <span class="n">errors_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compute_euler_residual</span><span class="o">.</span><span class="p">(</span><span class="n">kfine_V</span><span class="p">)</span>
@@ -8008,7 +8014,7 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [10]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="n">mean</span><span class="p">(</span><span class="n">errors_V</span><span class="p">)</span>
@@ -8024,7 +8030,7 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>-1.9358814855090438</pre>
+<pre>-1.9358814855090303</pre>
 </div>
 </div>
 </div>
@@ -8036,8 +8042,7 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>While not absolutely terrible, a mean residual residual of greater than $-2$ is not ideal. One natural way to improve the accuracy of our solution is to increase the number of gridpoints.</p>
-<p>However, a computationally more efficient alternative would be to observe that both the value function and the policy function are smooth in $k$, suggesting that <strong>cubic</strong> splines might be a more fitting family of basis functions than <strong>linear</strong> splines. Below is my code for solving the model with cubic splines - it is written in a way that is optimized for Julia.</p>
+<p>This means that with this policy function, the agent is making a $1 mistake for every $86.27 dollars, which is not fantastic accuracy and can certainly be improved upon. One natural way to do this is to increase the number of gridpoints, but a computationally more efficient alternative would be to observe that both the value function and the policy function are <strong>smooth</strong> in $k$, suggesting that <strong>cubic</strong> splines might be a more fitting family of basis functions than <strong>linear</strong> splines. Below is my code for solving the model with cubic splines - (it is written in a way that is optimized for Julia).</p>
 </div>
 </div>
 </div>
@@ -8046,7 +8051,7 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [11]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [ ]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Interpolations</span>
@@ -8058,11 +8063,15 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 <span class="w">    </span><span class="c">#Economic parameters</span>
 <span class="w">    </span><span class="n">β</span><span class="o">::</span><span class="kt">Float64</span><span class="w">  </span><span class="c"># Discount factor</span>
 <span class="w">    </span><span class="n">α</span><span class="o">::</span><span class="kt">Float64</span><span class="w">   </span><span class="c"># Capital share in production</span>
+
 <span class="w">    </span><span class="c">#Grid</span>
 <span class="w">    </span><span class="n">kmin</span><span class="o">::</span><span class="kt">Float64</span>
 <span class="w">    </span><span class="n">kmax</span><span class="o">::</span><span class="kt">Float64</span>
 <span class="w">    </span><span class="n">nk</span><span class="o">::</span><span class="kt">Int64</span>
 <span class="w">    </span><span class="n">kgrid</span><span class="o">::</span><span class="kt">AbstractVector</span><span class="p">{</span><span class="o">&lt;:</span><span class="kt">Real</span><span class="p">}</span>
+
+<span class="w">    </span><span class="c">#Numerical parameters</span>
+<span class="w">    </span>
 <span class="w">    </span><span class="n">tol</span><span class="o">::</span><span class="kt">Float64</span>
 <span class="w">    </span><span class="n">max_iter</span><span class="o">::</span><span class="kt">Int64</span>
 <span class="w">    </span><span class="c">#Functions</span>
@@ -8081,65 +8090,66 @@ and assess the distribution of the absolute value of the errors in log-10 space.
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Params</span><span class="p">(</span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">kmax</span><span class="p">,</span><span class="w"> </span><span class="n">nk</span><span class="p">,</span><span class="w"> </span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">tol</span><span class="p">,</span><span class="w"> </span><span class="n">max_iter</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">u_c</span><span class="p">,</span><span class="w"> </span><span class="n">f_k</span><span class="p">)</span>
 <span class="k">end</span>
 
-<span class="k">function</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">vguess_V</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Float64</span><span class="p">},</span><span class="w"> </span><span class="n">p</span><span class="o">::</span><span class="kt">Params</span><span class="p">)</span>
+<span class="k">function</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">valueV_old</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Float64</span><span class="p">},</span><span class="w"> </span><span class="n">p</span><span class="o">::</span><span class="kt">Params</span><span class="p">)</span>
 <span class="w">    </span><span class="nd">@unpack</span><span class="w"> </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">kmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span>
 
-<span class="w">    </span><span class="n">vguess_F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CubicSplineInterpolation</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">vguess_V</span><span class="p">)</span>
-<span class="w">    </span><span class="n">Tv_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
-<span class="w">    </span><span class="n">pol_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
+<span class="w">    </span><span class="n">valueF_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CubicSplineInterpolation</span><span class="p">(</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">valueV_old</span><span class="p">)</span>
+<span class="w">    </span><span class="n">valueV_new</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
+<span class="w">    </span><span class="n">polV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
 <span class="w">    </span>
 <span class="w">    </span><span class="k">for</span><span class="w"> </span><span class="n">i</span><span class="w"> </span><span class="k">in</span><span class="w"> </span><span class="n">eachindex</span><span class="p">(</span><span class="n">kgrid</span><span class="p">)</span>
 <span class="w">        </span><span class="n">k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">kgrid</span><span class="p">[</span><span class="n">i</span><span class="p">]</span>
-<span class="w">        </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimize</span><span class="p">(</span><span class="n">k′</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k′</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">vguess_F</span><span class="p">(</span><span class="n">k′</span><span class="p">),</span><span class="w"> </span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
-<span class="w">        </span><span class="n">Tv_V</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">results</span><span class="o">.</span><span class="n">minimum</span>
-<span class="w">        </span><span class="n">pol_V</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">results</span><span class="o">.</span><span class="n">minimizer</span>
+<span class="w">        </span><span class="n">results</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">optimize</span><span class="p">(</span><span class="n">k′</span><span class="w"> </span><span class="o">-&gt;</span><span class="w"> </span><span class="o">-</span><span class="n">u</span><span class="p">(</span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k′</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">valueF_old</span><span class="p">(</span><span class="n">k′</span><span class="p">),</span><span class="w"> </span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">))</span>
+<span class="w">        </span><span class="n">valueV_new</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="o">-</span><span class="n">results</span><span class="o">.</span><span class="n">minimum</span>
+<span class="w">        </span><span class="n">polV</span><span class="p">[</span><span class="n">i</span><span class="p">]</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">results</span><span class="o">.</span><span class="n">minimizer</span>
 <span class="w">    </span><span class="k">end</span>
 
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">Tv_V</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">valueV_new</span><span class="p">,</span><span class="w"> </span><span class="n">polV</span>
 <span class="k">end</span>
 
 <span class="k">function</span><span class="w"> </span><span class="n">solve_model_vfi</span><span class="p">(</span><span class="n">p</span><span class="o">::</span><span class="kt">Params</span><span class="p">)</span>
 <span class="w">    </span><span class="nd">@unpack</span><span class="w"> </span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">u</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">tol</span><span class="p">,</span><span class="w"> </span><span class="n">max_iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span>
 
-<span class="w">    </span><span class="n">pol_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
-<span class="w">    </span><span class="n">vguess_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="o">.</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
+<span class="w">    </span><span class="n">polV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">zeros</span><span class="p">(</span><span class="n">length</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
+<span class="w">    </span><span class="n">valueV_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u</span><span class="o">.</span><span class="p">(</span><span class="n">f</span><span class="o">.</span><span class="p">(</span><span class="n">kgrid</span><span class="p">))</span>
 
 <span class="w">    </span><span class="n">iiter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">0</span><span class="w"> </span>
 
 <span class="w">    </span><span class="k">while</span><span class="w"> </span><span class="n">iiter</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">max_iter</span>
 <span class="w">        </span><span class="n">iiter</span><span class="w"> </span><span class="o">+=</span><span class="w"> </span><span class="mi">1</span>
 
-<span class="w">        </span><span class="n">vnew_V</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">vguess_V</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span>
+<span class="w">        </span><span class="n">valueV_new</span><span class="p">,</span><span class="w"> </span><span class="n">polV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">bellman_operator</span><span class="p">(</span><span class="n">valueV_old</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="p">)</span>
 
-<span class="w">        </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">vnew_V</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">vguess_V</span><span class="p">,</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span>
+<span class="w">        </span><span class="n">diff</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">norm</span><span class="p">(</span><span class="n">valueV_new</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">valueV_old</span><span class="p">,</span><span class="w"> </span><span class="nb">Inf</span><span class="p">)</span>
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">iiter</span><span class="w"> </span><span class="o">%</span><span class="w"> </span><span class="mi">50</span><span class="w"> </span><span class="o">==</span><span class="w"> </span><span class="mi">0</span>
 <span class="w">            </span><span class="n">println</span><span class="p">(</span><span class="s">"Iteration: </span><span class="si">$iiter</span><span class="s">, Error: </span><span class="si">$diff</span><span class="s">"</span><span class="p">)</span>
 <span class="w">        </span><span class="k">end</span>
+
+<span class="w">        </span><span class="n">valueV_old</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">copy</span><span class="p">(</span><span class="n">valueV_new</span><span class="p">)</span>
+
 <span class="w">        </span><span class="k">if</span><span class="w"> </span><span class="n">diff</span><span class="w"> </span><span class="o">&lt;</span><span class="w"> </span><span class="n">tol</span>
 <span class="w">            </span><span class="k">break</span>
 <span class="w">        </span><span class="k">end</span>
-
-<span class="w">        </span><span class="n">vguess_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">copy</span><span class="p">(</span><span class="n">vnew_V</span><span class="p">)</span>
 <span class="w">    </span><span class="k">end</span>
 
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">vguess_V</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">valueV_old</span><span class="p">,</span><span class="w"> </span><span class="n">polV</span>
 <span class="k">end</span>
 
 <span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_params</span><span class="p">(</span><span class="n">nk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1_001</span><span class="p">,</span><span class="w"> </span><span class="n">tol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-8</span><span class="p">,</span><span class="w"> </span><span class="n">kmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.1</span><span class="p">)</span>
 
-<span class="n">value_V</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve_model_vfi</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+<span class="n">value_V</span><span class="p">,</span><span class="w"> </span><span class="n">polV</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">solve_model_vfi</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
 
 <span class="k">using</span><span class="w"> </span><span class="n">Plots</span>
 <span class="n">kfine_V</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">range</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">kmin</span><span class="p">,</span><span class="w"> </span><span class="n">p</span><span class="o">.</span><span class="n">kmax</span><span class="p">,</span><span class="w"> </span><span class="n">length</span><span class="o">=</span><span class="w"> </span><span class="mi">5_001</span><span class="p">)</span>
 
-<span class="n">pol_F</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CubicSplineInterpolation</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">pol_V</span><span class="p">)</span>
+<span class="n">polF</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">CubicSplineInterpolation</span><span class="p">(</span><span class="n">p</span><span class="o">.</span><span class="n">kgrid</span><span class="p">,</span><span class="w"> </span><span class="n">polV</span><span class="p">)</span>
 
 <span class="k">function</span><span class="w"> </span><span class="n">pol_F_analytical</span><span class="p">(</span><span class="n">k</span><span class="o">::</span><span class="kt">Float64</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">::</span><span class="kt">Params</span><span class="p">)</span>
 <span class="w">    </span><span class="nd">@unpack</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span>
 <span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">α</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 <span class="k">end</span>
 
-<span class="n">plot</span><span class="p">(</span><span class="n">kfine_V</span><span class="p">,</span><span class="w"> </span><span class="n">pol_F</span><span class="o">.</span><span class="p">(</span><span class="n">kfine_V</span><span class="p">),</span>
+<span class="n">plot</span><span class="p">(</span><span class="n">kfine_V</span><span class="p">,</span><span class="w"> </span><span class="n">polF</span><span class="o">.</span><span class="p">(</span><span class="n">kfine_V</span><span class="p">),</span>
 <span class="w">    </span><span class="n">label</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"Policy function from VFI"</span><span class="p">,</span>
 <span class="w">    </span><span class="n">xlabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"k"</span><span class="p">,</span><span class="w"> </span><span class="n">ylabel</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="s">"k′"</span><span class="p">)</span>
 
@@ -8185,7 +8195,7 @@ Iteration: 450, Error: 1.1983821934791195e-8
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Interpolating with cubic splines has dramatically improved the fit between the numerical policy function and the true policy function to the point where they are close to being visually indistinguishable. Indeed, here's the new distribution of the Euler residuals:</p>
+<p>As evident from above, interpolating with cubic splines has dramatically improved the fit between the numerical policy function and the true policy function to the point where they are close to being visually indistinguishable. Indeed, here's the new distribution of the Euler residuals (note that in the log-utility case, the inverse of the marginal utility function is the same):</p>
 </div>
 </div>
 </div>
@@ -8194,18 +8204,16 @@ Iteration: 450, Error: 1.1983821934791195e-8
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [12]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [18]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
-<div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">compute_euler_residual</span><span class="p">(</span><span class="n">k</span><span class="o">::</span><span class="kt">Float64</span><span class="p">;</span><span class="w"> </span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span><span class="o">::</span><span class="kt">Params</span><span class="p">)</span>
-<span class="w">    </span><span class="nd">@unpack</span><span class="w"> </span><span class="n">β</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="p">,</span><span class="w"> </span><span class="n">f</span><span class="p">,</span><span class="w"> </span><span class="n">u_c</span><span class="p">,</span><span class="w"> </span><span class="n">f_k</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">p</span>
-<span class="w">    </span><span class="n">k′</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pol_F</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
+<div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">compute_euler_residual</span><span class="p">(</span><span class="n">k</span><span class="o">::</span><span class="kt">Float64</span><span class="p">)</span>
+<span class="w">    </span><span class="n">k′</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">polF</span><span class="p">(</span><span class="n">k</span><span class="p">)</span>
 <span class="w">    </span><span class="n">c</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">k</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k′</span>
-<span class="w">    </span><span class="n">LHS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">u_c</span><span class="p">(</span><span class="n">c</span><span class="p">)</span>
-<span class="w">    </span><span class="n">k′′</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">pol_F</span><span class="p">(</span><span class="n">k′</span><span class="p">)</span>
+<span class="w">    </span><span class="n">k′′</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">polF</span><span class="p">(</span><span class="n">k′</span><span class="p">)</span>
 <span class="w">    </span><span class="n">c′</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">f</span><span class="p">(</span><span class="n">k′</span><span class="p">)</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">k′′</span>
 <span class="w">    </span><span class="n">RHS</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">f_k</span><span class="p">(</span><span class="n">k′</span><span class="p">)</span><span class="w"> </span><span class="o">*</span><span class="w"> </span><span class="n">u_c</span><span class="p">(</span><span class="n">c′</span><span class="p">)</span>
-<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">log10</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="n">LHS</span><span class="o">/</span><span class="n">RHS</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="mi">1</span><span class="p">))</span>
+<span class="w">    </span><span class="k">return</span><span class="w"> </span><span class="n">log10</span><span class="p">(</span><span class="n">abs</span><span class="p">(</span><span class="mi">1</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="p">(</span><span class="n">u_c</span><span class="p">(</span><span class="n">RHS</span><span class="p">)</span><span class="o">/</span><span class="n">c</span><span class="p">)))</span>
 <span class="k">end</span>
 
 <span class="n">errors</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">compute_euler_residual</span><span class="o">.</span><span class="p">(</span><span class="n">kfine_V</span><span class="p">)</span>
@@ -8233,7 +8241,7 @@ Iteration: 450, Error: 1.1983821934791195e-8
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [13]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [19]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="n">mean</span><span class="p">(</span><span class="n">errors</span><span class="p">)</span>
@@ -8249,7 +8257,33 @@ Iteration: 450, Error: 1.1983821934791195e-8
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>-5.102943115284783</pre>
+<pre>-5.102943115287999</pre>
+</div>
+</div>
+</div>
+</div>
+</div><div class="jp-Cell jp-CodeCell jp-Notebook-cell" id="cell-id=2661846d">
+<div class="jp-Cell-inputWrapper" tabindex="0">
+<div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
+</div>
+<div class="jp-InputArea jp-Cell-inputArea">
+<div class="jp-InputPrompt jp-InputArea-prompt">In [21]:</div>
+<div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
+<div class="cm-editor cm-s-jupyter">
+<div class="highlight hl-julia"><pre><span></span><span class="mi">10</span><span class="o">^</span><span class="p">(</span><span class="o">-</span><span class="n">mean</span><span class="p">(</span><span class="n">errors</span><span class="p">))</span>
+</pre></div>
+</div>
+</div>
+</div>
+</div>
+<div class="jp-Cell-outputWrapper">
+<div class="jp-Collapser jp-OutputCollapser jp-Cell-outputCollapser">
+</div>
+<div class="jp-OutputArea jp-Cell-outputArea">
+<div class="jp-OutputArea-child">
+<div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
+<div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
+<pre>126748.58372943608</pre>
 </div>
 </div>
 </div>
@@ -8261,7 +8295,8 @@ Iteration: 450, Error: 1.1983821934791195e-8
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>When using cubic splines, the mean Euler residual has dramatically decreased from -1.9 (or about $1.3\%$ average error in the Euler equation) to -5.1 (or only about $0.0008\%$ error)!</p>
+<p>Using a family of basis functions that respects the underlying smoothness properties of their true counterparts has resulted in an accuracy gain of more than 3 orders of magnitude (the agent is now only making a $1 mistake for every $126,748 now), while not incurring the usual tradeoff of higher computational requirements!</p>
+<p>Whether -5.1 is accurate <strong>enough</strong> for your own situation is highly subfield and situation-dependent. For complex models, this would be more than enough in most literatures, whereas in a simple problem like this, it's much less clear. Indeed, we will see that it is in fact quite easy to unlock even greater levels of accuracy.</p>
 </div>
 </div>
 </div>
