@@ -7956,7 +7956,7 @@ $$
 and assess the distribution.</p>
 <p>This formulation of the errors has two important benefits:</p>
 <ol>
-<li>The Euler residuals now have an intuitive interpretation - if your residual was $x$, this means that the agent is making a $1 mistake for every $10^{-x}$ dollars.</li>
+<li>The Euler residuals now have an intuitive interpretation - if your residual was $x$, this means that the agent is making a $\$1$ mistake for every $10^{-x}$.</li>
 <li>They are unit-free.</li>
 </ol>
 </div>
@@ -8042,7 +8042,7 @@ and assess the distribution.</p>
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>This means that with this policy function, the agent is making a $1 mistake for every $86.27 dollars, which is not fantastic accuracy and can certainly be improved upon. One natural way to do this is to increase the number of gridpoints, but a computationally more efficient alternative would be to observe that both the value function and the policy function are <strong>smooth</strong> in $k$, suggesting that <strong>cubic</strong> splines might be a more fitting family of basis functions than <strong>linear</strong> splines. Below is my code for solving the model with cubic splines - (it is written in a way that is optimized for Julia).</p>
+<p>This means that with this policy function, the agent is making a $\$1$ mistake for every $\$86.27$, which is not fantastic accuracy and can certainly be improved upon. One natural way to do this is to increase the number of gridpoints, but a computationally more efficient alternative would be to observe that both the value function and the policy function are <strong>smooth</strong> in $k$, suggesting that <strong>cubic</strong> splines might be a more fitting family of basis functions than <strong>linear</strong> splines. Below is my code for solving the model with cubic splines - (it is written in a way that is optimized for Julia).</p>
 </div>
 </div>
 </div>
@@ -8295,7 +8295,7 @@ Iteration: 450, Error: 1.1983821934791195e-8
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>Using a family of basis functions that respects the underlying smoothness properties of their true counterparts has resulted in an accuracy gain of more than 3 orders of magnitude (the agent is now only making a $1 mistake for every $126,748 now), while not incurring the usual tradeoff of higher computational requirements!</p>
+<p>Using a family of basis functions that respects the underlying smoothness properties of their true counterparts has resulted in an accuracy gain of more than 3 orders of magnitude (the agent is now only making a $\$1$ mistake for every $\$126,748$), while not incurring the usual tradeoff of higher computational requirements!</p>
 <p>Whether -5.1 is accurate <strong>enough</strong> for your own situation is highly subfield and situation-dependent. For complex models, this would be more than enough in most literatures, whereas in a simple problem like this, it's much less clear. Indeed, we will see that it is in fact quite easy to unlock even greater levels of accuracy.</p>
 </div>
 </div>
