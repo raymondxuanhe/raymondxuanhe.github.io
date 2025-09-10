@@ -1,8 +1,8 @@
 
 
-
-using Interpolations, LinearAlgebra, Optim, Plots, Roots
+using Interpolations, LinearAlgebra, Roots
 using Parameters
+using NonlinearSolve
 
 const β = 0.96
 const α = 0.8
@@ -14,28 +14,62 @@ const kgrid = range(kmin, kmax, length=nk)
 
 f(k) = k^α
 u(c) = c ≥ 0.0 ? log(c) : -1e10
-u_c(c) = c ≥ 0.0 ? 1/c : 0.0
+u_c(c) = c ≥ 0.0 ? 1/c : -1e10
 f_k(k) = α * k^(α - 1)
 u_c_inv(c) = c ≥ 0.0 ? 1/c : -1e10
 
-function coleman_operator_roots(polguess_V::Vector{Float64})
-    polguess_F = CubicSplineInterpolation(kgrid, polguess_V)
-    Kp_V = zeros(nk)
-    for i in eachindex(kgrid)
-        k = kgrid[i]
-        function euler_eq(k′)
-            LHS = u_c(f(k) - k′)
-            c′ = f(k′) - polguess_F(k′)
-            RHS = β*f_k(k′)*u_c(c′)
-            return LHS - RHS
-        end
-        Kp_V[i] = find_zero(euler_eq, (kmin, f(k)))
+
+
+
+
+function K(g; p)
+    #Construct a linear interpolation approximation of the consumption policy function g
+    g_func = LinearInterpolation(p.k_grid, g, extrapolation_bc = Line())
+    function h!(H, c, k)
+        H[1] = p.dudc(c[1]) .- p.β*(p.dudc.(g_func(p.f(k) .- c[1]))*p.dfdk(p.f(k) .- c[1]))
     end
-    return Kp_V
+    #Solving for the updated consumption value
+    Kg = Vector{Vector{Float64}}(undef, p.nk)
+    for (i, k) in collect(enumerate(p.k_grid))
+        Kg[i] = nlsolve((H,x) -> h!(H, x, k), [0.02*k]).zero  # find the c that makes the EE 0 in those specific grid-points!
+    end
+    return map(v -> v[1], Kg) #Converts the vector of 1-element vectors, into just a vector
 end
 
+
+
+
+function coleman_operator(cpolV_old::Vector{Float64})
+    cpolF_old = CubicSplineInterpolation(kgrid, cpolV_old)
+    cpolV_new = zeros(nk)
+    for i in eachindex(kgrid)
+        k = kgrid[i]
+        function euler_eq(du, u, p)
+            c = u[1]
+            LHS = u_c(c)
+            k′ = f(k) - c
+
+            if k′ > f(k)
+                du[1] = 1e10
+            end
+
+            c′ = cpolF_old(k′)
+            RHS = β * f_k(k′) * u_c(c′)
+            du[1] = LHS - RHS
+        end
+        u0 = [cpolF_old(k)]
+        prob = NonlinearProblem(euler_eq, u0)
+        cpolV_new[i] = solve(prob, NewtonRaphson())[1]
+    end
+    return cpolV_new
+end
+
+cpolV_old = f.(kgrid)
+
+coleman_operator(cpolV_old)
+
 function solve_model_coleman()
-    polguess_V = zeros(nk)
+    cpolV_old = f.(kgrid)
     iiter = 0
     diff = 1
     max_iter = 600
@@ -43,23 +77,23 @@ function solve_model_coleman()
 
     @time while iiter < max_iter 
         iiter += 1
-        polnew_V = coleman_operator_roots(polguess_V)
+        cpolV_new = coleman_operator_roots(cpolV_old)
 
-        diff = norm(polnew_V - polguess_V, Inf)
+        diff = norm(cpolV_new - cpolV_old, Inf)
 
         println("Iteration $iiter, Error: $diff")
+
+        cpolV_old = cpolV_new
 
         if diff < tol
             println("Converged after $iiter iterations")
             break
         end
-
-        polguess_V = polnew_V
     end
-    return polguess_V
+    return cpolV_old
 end
 
-pol_V = solve_model_coleman()
+cpol_V = solve_model_coleman()
 
 plot(kgrid, pol_V, label="Coleman Time Iteration", 
     xlabel="Capital", ylabel="Policy Function", 
@@ -127,4 +161,6 @@ function coleman_operator_optim(polguess_V::Vector{Float64})
     end
     return Kp_V
 end
+
+
 
