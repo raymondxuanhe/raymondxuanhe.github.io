@@ -7557,7 +7557,7 @@ $$</li>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [29]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [1]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">using</span><span class="w"> </span><span class="n">Interpolations</span><span class="p">,</span><span class="w"> </span><span class="n">LinearAlgebra</span><span class="p">,</span><span class="w"> </span><span class="n">Roots</span><span class="p">,</span><span class="w"> </span><span class="n">Plots</span>
@@ -7631,7 +7631,7 @@ $$</li>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [30]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [2]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">make_params</span><span class="p">(;</span><span class="w"> </span><span class="n">β</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.96</span><span class="p">,</span><span class="w"> </span><span class="n">α</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">0.4</span><span class="p">,</span><span class="w"> </span><span class="n">kmin</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-3</span><span class="p">,</span><span class="w"> </span><span class="n">kmax</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">100.0</span><span class="p">,</span><span class="w"> </span><span class="n">nk</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">1_001</span><span class="p">,</span><span class="w"> </span><span class="n">tol</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mf">1e-6</span><span class="p">,</span><span class="w"> </span><span class="n">max_iter</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="mi">600</span><span class="p">)</span>
@@ -7935,7 +7935,7 @@ Stacktrace:
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [31]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [4]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="n">p</span><span class="w"> </span><span class="o">=</span><span class="w"> </span><span class="n">make_params</span><span class="p">()</span>
@@ -7951,7 +7951,7 @@ Stacktrace:
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>Params{var"#u#28", var"#f#29"{Float64}, var"#u_c#30", var"#f_k#31"{Float64}}
+<pre>Params{var"#u#16", var"#f#17"{Float64}, var"#u_c#18", var"#f_k#19"{Float64}}
   β: Float64 0.96
   α: Float64 0.4
   kmin: Float64 0.001
@@ -7960,10 +7960,10 @@ Stacktrace:
   kgrid: StepRangeLen{Float64, Base.TwicePrecision{Float64}, Base.TwicePrecision{Float64}, Int64}
   tol: Float64 1.0e-6
   max_iter: Int64 600
-  u: u (function of type var"#u#28")
-  f: f (function of type var"#f#29"{Float64})
-  u_c: u_c (function of type var"#u_c#30")
-  f_k: f_k (function of type var"#f_k#31"{Float64})
+  u: u (function of type var"#u#16")
+  f: f (function of type var"#f#17"{Float64})
+  u_c: u_c (function of type var"#u_c#18")
+  f_k: f_k (function of type var"#f_k#19"{Float64})
 </pre>
 </div>
 </div>
@@ -8134,7 +8134,7 @@ end</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [64]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [5]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">coleman_operator</span><span class="p">(</span><span class="n">polV_old</span><span class="o">::</span><span class="kt">Vector</span><span class="p">{</span><span class="kt">Float64</span><span class="p">},</span><span class="w"> </span><span class="n">p</span><span class="o">::</span><span class="kt">Params</span><span class="p">)</span>
@@ -8167,7 +8167,7 @@ end</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>coleman_operator (generic function with 2 methods)</pre>
+<pre>coleman_operator (generic function with 1 method)</pre>
 </div>
 </div>
 </div>
@@ -8199,7 +8199,7 @@ end</p>
 <div class="jp-Collapser jp-InputCollapser jp-Cell-inputCollapser">
 </div>
 <div class="jp-InputArea jp-Cell-inputArea">
-<div class="jp-InputPrompt jp-InputArea-prompt">In [65]:</div>
+<div class="jp-InputPrompt jp-InputArea-prompt">In [6]:</div>
 <div class="jp-CodeMirrorEditor jp-Editor jp-InputArea-editor" data-type="inline">
 <div class="cm-editor cm-s-jupyter">
 <div class="highlight hl-julia"><pre><span></span><span class="k">function</span><span class="w"> </span><span class="n">solve_model_coleman</span><span class="p">(</span><span class="n">p</span><span class="o">::</span><span class="kt">Params</span><span class="p">)</span>
@@ -8238,7 +8238,7 @@ end</p>
 <div class="jp-OutputArea-child">
 <div class="jp-OutputPrompt jp-OutputArea-prompt"></div>
 <div class="jp-RenderedText jp-OutputArea-output" data-mime-type="text/plain" tabindex="0">
-<pre>solve_model_coleman (generic function with 3 methods)</pre>
+<pre>solve_model_coleman (generic function with 1 method)</pre>
 </div>
 </div>
 </div>
@@ -8486,8 +8486,8 @@ Converged after 16 iterations
 </div>
 <div class="jp-InputArea jp-Cell-inputArea"><div class="jp-InputPrompt jp-InputArea-prompt">
 </div><div class="jp-RenderedHTMLCommon jp-RenderedMarkdown jp-MarkdownOutput" data-mime-type="text/markdown">
-<p>PFI is not only significantly faster than VFI, it has also resulted in much more accurate policy functions too! With the policy function from PFI, the agent is now making a $1 mistake for over every $10 million!</p>
-<p>When speed becomes critical, the first avenue you should always explore and exhaust to find model-specific mathematical short-cuts that allow for faster algorithms. By iterating on the Euler equation, which uses much more information about the problem than the Bellman equation (we can push this even further), we are rewarded with a speed-up by almost an entire order of magnitude. In fact, it would be even bigger if we relaxed the tolerance level such that the resulting Euler errors are the same (you should think about why this divergence occurred despite the tolerance being the same in the iterative portion of the code). The second source of speed-ups would then be software-specific, i.e. writing optimized code for your language. Finally, only after the previous two have been exhausted, should you start exploring hardware-related speed-ups like parallelization (parallelizing is only a multiplier of your serial code).</p>
+<p>PFI is not only significantly faster than VFI, it has also resulted in much more accurate policy functions too! With the policy function from PFI, the agent is now making a $\$1$ mistake for over every $\$10$ million!</p>
+<p>When speed becomes critical, you should always find and exploit as many model-specific mathematical short-cuts as you can. By iterating on the Euler equation, which uses much more information about the problem than the Bellman equation, we are rewarded with BOTH a speed-up by almost an entire order of magnitude and an increase in accuracy!</p>
 </div>
 </div>
 </div>
