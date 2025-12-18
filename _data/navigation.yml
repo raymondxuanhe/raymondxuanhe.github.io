@@ -15,7 +15,7 @@ main:
     url: /teaching/
    
   - title: "CV"
-    url: /files/Raymond_He_CV.pdf
+    url: /files/CV/raymond_he_CV.pdf
     
   - title: "Computational Benchmarks"
     url: /computational_benchmarks/
