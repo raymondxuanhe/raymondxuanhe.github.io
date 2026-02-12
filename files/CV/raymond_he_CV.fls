@@ -274,13 +274,13 @@ INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpmnc.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/vf/public/kpfonts/jkpmit7t.vf
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpmite.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpmit8r.tfm
-INPUT /usr/local/texlive/2025/texmf-dist/fonts/vf/public/kpfonts/jkpmn7t.vf
-INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpmne.tfm
-INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpmn8r.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/vf/public/kpfonts/jkpbn7t.vf
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpbne.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpbn8r.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/enc/dvips/kpfonts/kpfonts-expert.enc
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/vf/public/kpfonts/jkpmn7t.vf
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpmne.tfm
+INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpmn8r.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/vf/public/kpfonts/jkpmit7t.vf
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpmite.tfm
 INPUT /usr/local/texlive/2025/texmf-dist/fonts/tfm/public/kpfonts/jkpmit8r.tfm
