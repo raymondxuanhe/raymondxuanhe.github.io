@@ -13,7 +13,7 @@ redirect_from:
 
 
 **The Effects of Pay Transparency on the Labor Market** *(with Suryansh Upmanyu)*<br>
-[Draft](/files/papers/pay_transparency_draft.pdf)
+[Draft](/files/papers/pay_transparency_latest_version.pdf)
 
 **Noisy Wage Posting** *(with Suryansh Upmanyu and Francesco Conti)*
 
