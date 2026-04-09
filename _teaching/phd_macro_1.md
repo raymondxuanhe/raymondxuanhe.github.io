@@ -8,7 +8,7 @@ date: 2025-01-01
 location: ""
 ---
 
-Fall 2022 & Fall 2023, Fall 2025 for Prof. Stefano Eusepi, and Fall 2024 for Prof. Christoph Boehm
+Fall 2022 & Fall 2023, Fall 2025 for [Prof. Stefano Eusepi](https://sites.google.com/view/stefano-eusepi/home), and Fall 2024 for [Prof. Christoph Boehm](https://www.christopheboehm.com/home)
 
 # Notes
 * [1. Value function iteration](/files/jupyter_notebooks/1_vfi.html)
