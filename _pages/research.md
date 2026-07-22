@@ -9,8 +9,6 @@ redirect_from:
 ## Working Papers
 [**How Much Can I Make? Cross-Firm Pay Transparency's Effects On the US Labor Market**](/files/papers/pay_transparency_latest_version.pdf) *(with [Suryansh Upmanyu](https://upmanyu-suryansh.github.io))*
 
-[Prof. Stefano Eusepi](https://sites.google.com/view/stefano-eusepi/home)
-
 ## Works in Progress
 
 **The Currency and Maturity Composition of Sovereign Debt**
