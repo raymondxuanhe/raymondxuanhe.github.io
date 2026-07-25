@@ -6,7 +6,7 @@ redirect_from:
   - /computational_benchmarks.html
 ---
 
-You can find the time-to-compute of four different processors for two computationally intensive tasks:
+You can find the time-to-compute of three different processors for two computationally intensive tasks:
 
 1. Value function iteration solving the [Arellano (2008)](https://www.aeaweb.org/articles?id=10.1257/aer.98.3.690) model on a fine grid.[^2]
 2. Reading, and cleaning 615 GB (compressed) of data,[^1] and 
@@ -35,11 +35,6 @@ For full transparency, I have included all the relevant specificifications of ea
 
 * 40-core GPU, 16-core neural engine
 * 64 GB unified memory
-
-### M2 Macbook Air 13 inch (8 cores - 6 threads used for parallelization)
-
-* 8-core GPU, 16-core neural engine
-* 16 GB unified memory
 
 [^1]: Parallelization was performed across individual files.
 [^2]: The mesh consisted of 101 points for endowment and 951 points for debt. Parallelization was performed across the endowment grid while evaluating the Bellman operator.
