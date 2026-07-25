@@ -1,6 +1,6 @@
 #Julia code to create bar plots showing the CPU benchmarks
 #Author: Raymond He
-#Last updated: June 5 2025
+#Last updated: July 25 2026
 
 using Plots
 
@@ -9,12 +9,15 @@ using Plots
 #################################################
 
 # CPU performance data
-cpus = ["Ryzen 9 9950X", "M4 Max", "M2"]
-multi_threaded = [29.1, 24.7, 72.1]
-single_threaded = [383.1, 152.1, 186.9]
+processors = ["5090-FP64", "5090 - FP32", "Ryzen 9 9950X", "M4 Max", "M2"]
+multi_threaded = [0.79, 29.1, 24.7, 72.1]
+single_threaded = [0.12, 383.1, 152.1, 186.9]
+
+#0.791 seconds for Float64
+#0.116 seconds for Float32
 
 # Create positions for grouped bars
-x_pos = 1:length(cpus)
+x_pos = 1:length(processors)
 bar_width = 0.35
 
 # Create the plot with manual bar positioning
@@ -23,11 +26,11 @@ p = bar(x_pos .- bar_width/2, multi_threaded,
         label = "Multi-threaded",
         color = :steelblue,
         title = "Solving the Arellano (2008) model",
-        xlabel = "CPU",
+        xlabel = "Processor",
         ylabel = "Time (seconds)",
         ylim   = (0,420),
         yticks = 0:60:420,
-        xticks = (x_pos, cpus),
+        xticks = (x_pos, processors),
         legend = :topright,
         fontfamily = "Computer Modern",
         dpi = 300)
