@@ -18,6 +18,6 @@ via value function iteration.[^1] All code was written on Julia. I am not sponso
 ![image info](/files/benchmarks/cpu_benchmark.png)
 
 ## GPUs
-![image info](/files/benchmarks/cpu_benchmark.png)
+![image info](/files/benchmarks/gpu_benchmark.png)
 
 [^1]: The mesh consisted of 101 points for endowment and 951 points for debt. Parallelization was performed across the endowment grid.
