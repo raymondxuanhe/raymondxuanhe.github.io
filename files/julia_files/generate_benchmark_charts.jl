@@ -1,152 +1,123 @@
 #Julia code to create bar plots showing the CPU benchmarks
 #Author: Raymond He
-#Last updated: July 25 2026
-
+#Last updated: July 26 2026
 
 using CairoMakie
 
-#################################################
-####### Solving the Arellano (2008) model #######
-#################################################
-const BG       = "#0b2545"   # figure background
-const PANEL    = "#0f2f5c"   # plot area
-const C_FP64   = "#3fa89c"   # GPU, double precision
-const C_MULTI  = "#5b9bd5"   # CPU, multi-threaded
-const C_SINGLE = "#ed7d31"   # CPU, single-threaded
-const FAINT    = ("#ffffff", 0.10)
-const SUBTLE   = "#a9c6ea"
+# ── same palette as the bar charts ─────────────────────────────────────────
+const BG      = "#0b2545"   # figure background
+const PANEL   = "#0f2f5c"   # plot area
+const C_M5    = "#5b9bd5"   # M5 Pro
+const C_RYZEN = "#ed7d31"   # Ryzen 9 9950X
+const FAINT   = ("#ffffff", 0.10)
+const SUBTLE  = "#a9c6ea"
 
-const LOGSCALE = false        # flip to false for a linear relative-time axis
+# ── data (seconds) ─────────────────────────────────────────────────────────
+threads = 1:12
 
-# ── data ───────────────────────────────────────────────────────────────────
-# FP32 is the yardstick, not a bar: bars are plotted as multiples of it,
-# while the white end labels stay in raw seconds.
-const BASELINE = 0.12        # RTX 5090, FP32, seconds
+m5    = [112.5, 62.3, 44.1, 34.7, 28.9, 24.7, 21.9, 19.8, 17.9, 17.2, 15.9, 15.4]
+ryzen = [140.0, 73.5, 50.6, 39.7, 33.7, 28.3, 25.5, 23.1, 21.3, 19.9, 18.6, 17.3]
 
-# ordered fastest → slowest so the winner sits at the top
-hardware = ["RTX 5090", "Ryzen 9 9950X", "M4 Max"]
-
-cat  = [1,      2,       3,       2,        3       ]   # row index
-secs = [0.79,   17.2,    24.7,    140.0,    152.1   ]   # raw seconds
-grp  = [1,      1,       1,       2,        2       ]   # dodge group
-cols = [C_FP64, C_MULTI, C_MULTI, C_SINGLE, C_SINGLE]
-
-rel = secs ./ BASELINE       # what actually gets drawn
-
-fmt(v) = v < 10 ? string(round(v; digits = 2), " s") : string(round(v; digits = 1), " s")
-
-# ── scale-dependent settings ───────────────────────────────────────────────
-# On a log axis 1x is the multiplicative origin, so bars grow from the
-# baseline itself and the left spine *is* the FP32 reference.
-scale_kwargs = LOGSCALE ?
-    (; xscale = log10,
-       xticks = ([1, 10, 100, 1000], ["1×", "10×", "100×", "1,000×"])) :
-    (; xticks = (0:200:1400, string.(0:200:1400, "×")))
-
-fillto = LOGSCALE ? 1.0 : 0.0
-xrange = LOGSCALE ? (1.0, 3000) : (0, 1500)
+fmt(v) = string(round(v; digits = 1))
 
 # ── figure ─────────────────────────────────────────────────────────────────
 fig = Figure(
-    size = (1000, 430),
+    size = (1000, 560),
     backgroundcolor = BG,
     fonts = (; regular = "TeX Gyre Heros Makie",
                bold    = "TeX Gyre Heros Makie Bold"),
 )
 
-ax = Axis(fig[1, 1];
-    title       = "Arellano (2008) — Time to Solve",
+ax = Axis(fig[1, 1],
+    title       = "Arellano (2008) — Time to Solve (CPU)",
     titlecolor  = :white,
     titlesize   = 26,
     titlefont   = :bold,
     titlegap    = 6,
-    subtitle    = "Relative to RTX 5090 FP32 (0.12 s = 1×) · lower is better",
+    subtitle    = "Time to solve vs. thread count · lower is better",
     subtitlecolor = SUBTLE,
     subtitlesize  = 15,
     subtitlegap   = 12,
 
     backgroundcolor = PANEL,
 
-    xlabel      = LOGSCALE ? "slowdown vs. FP32 baseline (log scale)" :
-                             "slowdown vs. FP32 baseline",
-    xlabelcolor = SUBTLE,
-    xlabelsize  = 14,
+    xlabel = "threads",
+    ylabel = "seconds",
+    xlabelcolor = SUBTLE, ylabelcolor = SUBTLE,
+    xlabelsize  = 14,     ylabelsize  = 14,
 
-    yticks    = (1:length(hardware), hardware),
-    yreversed = true,                       # row 1 at the top
+    xticks = 1:12,
+    yticks = 0:20:140,
 
     xticklabelcolor = :white, xticklabelsize = 13,
-    yticklabelcolor = :white, yticklabelsize = 16,
+    yticklabelcolor = :white, yticklabelsize = 13,
 
-    xgridcolor    = FAINT, xgridwidth = 1,
-    ygridvisible  = false,
-    yticksvisible = false,
-    xtickcolor    = ("#ffffff", 0.3),
+    xgridcolor = FAINT, xgridwidth = 1,
+    ygridcolor = FAINT, ygridwidth = 1,
 
+    xtickcolor = ("#ffffff", 0.3), ytickcolor = ("#ffffff", 0.3),
     bottomspinecolor = ("#ffffff", 0.35),
-    leftspinecolor   = ("#ffffff", 0.55),   # this spine is the baseline
+    leftspinecolor   = ("#ffffff", 0.35),
     topspinevisible   = false,
     rightspinevisible = false,
-
-    scale_kwargs...
 )
 
-barplot!(ax, cat, rel;
-    direction  = :x,
-    dodge      = grp,
-    n_dodge    = 2,
-    color      = cols,
-    fillto     = fillto,
-    gap        = 0.30,
-    dodge_gap  = 0.06,
-    bar_labels = fmt.(secs),               # white labels stay in seconds
-    label_size   = 15,
-    label_color  = :white,
-    label_font   = :bold,
-    label_offset = 6,
-)
+# lines first, markers on top so the dots sit above the stroke
+lines!(ax, threads, ryzen; color = C_RYZEN, linewidth = 3, label = "Ryzen 9 9950X")
+lines!(ax, threads, m5;    color = C_M5,    linewidth = 3, label = "M5 Pro")
 
-xlims!(ax, xrange...)   # headroom for the end-of-bar labels
+scatter!(ax, threads, ryzen; color = C_RYZEN, markersize = 11,
+         strokecolor = PANEL, strokewidth = 1.5)
+scatter!(ax, threads, m5;    color = C_M5,    markersize = 11,
+         strokecolor = PANEL, strokewidth = 1.5)
 
-Legend(fig[2, 1],
-    [PolyElement(color = c) for c in (C_FP64, C_MULTI, C_SINGLE)],
-    ["GPU — FP64", "CPU — multi-threaded", "CPU — single-threaded"];
-    orientation   = :horizontal,
-    framevisible  = false,
-    labelcolor    = :white,
-    labelsize     = 14,
-    tellheight    = true,
-    tellwidth     = false,
-    padding       = (0, 0, 0, 0),
+# point labels: Ryzen above its curve, M5 below, so they never collide
+# where the two series converge at high thread counts
+text!(ax, threads, ryzen; text = fmt.(ryzen),
+      align = (:center, :bottom), offset = (0, 11),
+      color = :white, fontsize = 12, font = :bold)
+
+text!(ax, threads, m5; text = fmt.(m5),
+      align = (:center, :top), offset = (0, -11),
+      color = :white, fontsize = 12, font = :bold)
+
+xlims!(ax, 0.5, 12.5)
+ylims!(ax, 0, 158)      # headroom for the label on the 140.0 point
+
+axislegend(ax;
+    position     = :rt,
+    framevisible = false,
+    labelcolor   = :white,
+    labelsize    = 15,
+    patchsize    = (26, 14),
+    padding      = (8, 8, 8, 8),
 )
-rowgap!(fig.layout, 8)
 
 fig
 
-save(pwd()*"/files/benchmarks/arellano_2008.png", fig; px_per_unit = 4)
+save(pwd()*"/files/benchmarks/cpu_benchmark.png", fig; px_per_unit = 4)
 
+# ── same palette as the other charts ───────────────────────────────────────
+const BG     = "#0b2545"   # figure background
+const PANEL  = "#0f2f5c"   # plot area
+const C_FP32 = "#5b9bd5"   # single precision
+const C_FP64 = "#ed7d31"   # double precision
+const FAINT  = ("#ffffff", 0.10)
+const SUBTLE = "#a9c6ea"
 
+# ── data (seconds) ─────────────────────────────────────────────────────────
+# One row per card, two dodge slots for precision.  GPUs only, so the span is
+# just ~14x — plain linear seconds, no log axis and no rebasing needed.
+hardware = ["RTX 5090", "RTX 4080 Super"]
 
-#####################################################
-####### Cleaning & Processing A Large Dataset #######
-#####################################################
-const BG       = "#0b2545"   # figure background
-const PANEL    = "#0f2f5c"   # plot area
-const C_MULTI  = "#5b9bd5"   # multi-threaded
-const C_SINGLE = "#ed7d31"   # single-threaded
-const FAINT    = ("#ffffff", 0.10)
-const SUBTLE   = "#a9c6ea"
+#       5090    5090    4080S   4080S
+#       FP32    FP64    FP32    FP64
+cat  = [1,      1,      2,      2     ]
+secs = [0.12,   0.79,   0.32,   1.69  ]
+grp  = [1,      2,      1,      2     ]
+cols = [C_FP32, C_FP64, C_FP32, C_FP64]
 
-# ── data ───────────────────────────────────────────────────────────────────
-# span is only ~5.8x here, so a linear axis is fine — no log, no rebasing
-hardware = ["Ryzen 9 9950X", "M4 Max"]
-
-cat  = [1,       2,       1,        2       ]   # row index
-mins = [59.9,    79.0,    152.5,    346.4   ]   # minutes
-grp  = [1,       1,       2,        2       ]   # dodge group
-cols = [C_MULTI, C_MULTI, C_SINGLE, C_SINGLE]
-
-fmt(v) = string(round(v; digits = 1), " min")
+fmt(v) = string(round(v; digits = 2), " s")
 
 # ── figure ─────────────────────────────────────────────────────────────────
 fig = Figure(
@@ -157,25 +128,25 @@ fig = Figure(
 )
 
 ax = Axis(fig[1, 1],
-    title       = "Cleaning & Processing A Large Dataset - Wall Clock",
+    title       = "Arellano (2008) — Time to Solve (GPU)",
     titlecolor  = :white,
     titlesize   = 26,
     titlefont   = :bold,
     titlegap    = 6,
-    subtitle    = "Full clean-and-process pass · lower is better",
+    subtitle    = "Single vs. double precision · lower is better",
     subtitlecolor = SUBTLE,
     subtitlesize  = 15,
     subtitlegap   = 12,
 
     backgroundcolor = PANEL,
 
-    xlabel      = "minutes",
+    xlabel      = "seconds",
     xlabelcolor = SUBTLE,
     xlabelsize  = 14,
 
     yticks    = (1:length(hardware), hardware),
     yreversed = true,                       # row 1 at the top
-    xticks    = 0:50:350,
+    xticks    = 0:0.25:1.75,
 
     xticklabelcolor = :white, xticklabelsize = 13,
     yticklabelcolor = :white, yticklabelsize = 16,
@@ -191,25 +162,25 @@ ax = Axis(fig[1, 1],
     rightspinevisible = false,
 )
 
-barplot!(ax, cat, mins;
+barplot!(ax, cat, secs;
     direction  = :x,
     dodge      = grp,
     n_dodge    = 2,
     color      = cols,
     gap        = 0.32,
     dodge_gap  = 0.06,
-    bar_labels = fmt.(mins),
+    bar_labels = fmt.(secs),
     label_size   = 15,
     label_color  = :white,
     label_font   = :bold,
     label_offset = 6,
 )
 
-xlims!(ax, 0, 395)   # headroom for the end-of-bar labels
+xlims!(ax, 0, 1.95)   # headroom for the end-of-bar labels
 
 Legend(fig[2, 1],
-    [PolyElement(color = c) for c in (C_MULTI, C_SINGLE)],
-    ["Multi-threaded", "Single-threaded"];
+    [PolyElement(color = c) for c in (C_FP32, C_FP64)],
+    ["FP32", "FP64"];
     orientation   = :horizontal,
     framevisible  = false,
     labelcolor    = :white,
@@ -220,5 +191,6 @@ Legend(fig[2, 1],
 )
 rowgap!(fig.layout, 8)
 
-save(pwd()*"/files/benchmarks/lightcast.png", fig; px_per_unit = 4)
 fig
+
+save(pwd()*"/files/benchmarks/gpu_benchmark.png", fig; px_per_unit = 4)
