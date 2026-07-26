@@ -24,10 +24,9 @@ For full transparency, I have included all the relevant specificifications of ea
 ## Specifications
 
 ### AMD Ryzen 9 9950X (16 cores, 32 threads - 30 threads used for parallelization)
-
+* GPU: Nvidia GeForce RTX 5090 (MSI Suprim Liquid)
 * CPU Cooler: Arctic Liquid Freezer III 360 mm
 * Motherboard: Gigabyte X870E Aorus Master
-* GPU: Nvidia GeForce RTX 5090 (MSI Liquid Suprim)
 * RAM: 64 GB of G.Skill DDR5 (2 x 32GB) 6000MT/s CL30
 * SSD: 2 TB Samsung 990 Pro Internal SSD PCIe Gen 4x4 NVMe
 
