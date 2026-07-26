@@ -15,9 +15,9 @@ via value function iteration.[^1] All code was written on Julia. I am not sponso
 [comment]: #For full transparency, I have included all the relevant specificifications of each platform at the bottom of the page. All code was written on Julia. I am not sponsored by or affiliated with any company in any way.
 
 ## CPUs
-![image info](/files/benchmarks/cpu_benchmarks.png)
+![image info](/files/benchmarks/cpu_benchmark.png)
 
 ## GPUs
-![image info](/files/benchmarks/cpu_benchmarks.png)
+![image info](/files/benchmarks/cpu_benchmark.png)
 
 [^1]: The mesh consisted of 101 points for endowment and 951 points for debt. Parallelization was performed across the endowment grid.
