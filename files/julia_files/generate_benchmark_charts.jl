@@ -9,6 +9,7 @@ const BG      = "#0b2545"   # figure background
 const PANEL   = "#0f2f5c"   # plot area
 const C_M5    = "#5b9bd5"   # M5 Pro
 const C_RYZEN = "#ed7d31"   # Ryzen 9 9950X
+const C_M4    = "#7ee8c8"   # M4 Max
 const FAINT   = ("#ffffff", 0.10)
 const SUBTLE  = "#a9c6ea"
 
@@ -17,12 +18,43 @@ threads = 1:12
 
 m5    = [112.5, 62.3, 44.1, 34.7, 28.9, 24.7, 21.9, 19.8, 17.9, 17.2, 15.9, 15.4]
 ryzen = [140.0, 73.5, 50.6, 39.7, 33.7, 28.3, 25.5, 23.1, 21.3, 19.9, 18.6, 17.3]
+m4    = [137.4, 72.5, 54.1, 43.0, 37.1, 31.0, 29.0, 26.2, 25.4, 24.7, 24.5, 23.9]
+
+series = [m4, m5, ryzen]
+colors = [C_M4, C_M5, C_RYZEN]
+names  = ["M4 Max", "M5 Pro", "Ryzen 9 9950X"]
 
 fmt(v) = string(round(v; digits = 1))
 
+# ── automatic label placement ──────────────────────────────────────────────
+# With three curves the point labels collide if they all sit above the line.
+# At each thread count: push the highest value's label up, the lowest one's
+# down, and send any middle value out to the right. Handles every crossover
+# in the sweep without hand-tuning.
+function label_placement(series)
+    n, m = length(first(series)), length(series)
+    offs   = [Vector{Tuple{Float64,Float64}}(undef, n) for _ in 1:m]
+    aligns = [Vector{Tuple{Symbol,Symbol}}(undef, n)   for _ in 1:m]
+    for i in 1:n
+        order = sortperm([s[i] for s in series]; rev = true)   # highest first
+        for (rank, s) in enumerate(order)
+            if rank == 1
+                offs[s][i], aligns[s][i] = (0.0, 13.0), (:center, :bottom)
+            elseif rank == m
+                offs[s][i], aligns[s][i] = (0.0, -13.0), (:center, :top)
+            else
+                offs[s][i], aligns[s][i] = (18.0, 2.0), (:left, :center)
+            end
+        end
+    end
+    return offs, aligns
+end
+
+offs, aligns = label_placement(series)
+
 # ── figure ─────────────────────────────────────────────────────────────────
 fig = Figure(
-    size = (1000, 560),
+    size = (1050, 580),
     backgroundcolor = BG,
     fonts = (; regular = "TeX Gyre Heros Makie",
                bold    = "TeX Gyre Heros Makie Bold"),
@@ -63,26 +95,21 @@ ax = Axis(fig[1, 1],
 )
 
 # lines first, markers on top so the dots sit above the stroke
-lines!(ax, threads, ryzen; color = C_RYZEN, linewidth = 3, label = "Ryzen 9 9950X")
-lines!(ax, threads, m5;    color = C_M5,    linewidth = 3, label = "M5 Pro")
+for (y, c, nm) in zip(series, colors, names)
+    lines!(ax, threads, y; color = c, linewidth = 3, label = nm)
+end
+for (y, c) in zip(series, colors)
+    scatter!(ax, threads, y; color = c, markersize = 11,
+             strokecolor = PANEL, strokewidth = 1.5)
+end
 
-scatter!(ax, threads, ryzen; color = C_RYZEN, markersize = 11,
-         strokecolor = PANEL, strokewidth = 1.5)
-scatter!(ax, threads, m5;    color = C_M5,    markersize = 11,
-         strokecolor = PANEL, strokewidth = 1.5)
+for (y, o, a) in zip(series, offs, aligns)
+    text!(ax, threads, y; text = fmt.(y), offset = o, align = a,
+          color = :white, fontsize = 12, font = :bold)
+end
 
-# point labels: Ryzen above its curve, M5 below, so they never collide
-# where the two series converge at high thread counts
-text!(ax, threads, ryzen; text = fmt.(ryzen),
-      align = (:center, :bottom), offset = (0, 11),
-      color = :white, fontsize = 12, font = :bold)
-
-text!(ax, threads, m5; text = fmt.(m5),
-      align = (:center, :top), offset = (0, -11),
-      color = :white, fontsize = 12, font = :bold)
-
-xlims!(ax, 0.5, 12.5)
-ylims!(ax, 0, 158)      # headroom for the label on the 140.0 point
+xlims!(ax, 0.5, 12.95)   # right margin for the "middle value" labels
+ylims!(ax, 0, 158)       # headroom for the label on the 140.0 point
 
 axislegend(ax;
     position     = :rt,
