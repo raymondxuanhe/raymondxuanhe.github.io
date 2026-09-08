@@ -185,7 +185,7 @@ html[data-theme="dark"] .research-list {
       <span class="paper-toggle">Abstract</span>
       <span class="paper-links">
         <a class="btn-paper" href="/files/research/pay_transparency/pay_transparency_latest_version.pdf">Paper</a>
-        <a href="/files/pay_transparency/pay_transparency_online_appendix.pdf">Online Appendix</a>
+        <a href="/files/research/pay_transparency/pay_transparency_online_appendix.pdf">Online Appendix</a>
         <a href="/files/research/pay_transparency/pay_transparency_slides.pdf">Slides</a>
       </span>
     </div>
