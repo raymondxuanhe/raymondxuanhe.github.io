@@ -1,12 +1,18 @@
 ---
 permalink: /
 title: ""
+layout: home
 author_profile: true
+subtitle: "Ph.D. in Economics Candidate, University of Texas at Austin"
+fields:
+  - International Economics
+  - Labor
+  - Sovereign Debt
 redirect_from: 
   - /about/
   - /about.html
 ---
 
-Hello, and welcome to my website!
+Thank you for visiting my website!
 
-My name is Raymond He, and I am a Ph.D. in Economics candidate at the University of Texas at Austin. I will be on the academic job market in Fall 2026. My research interests are in international economics, labor economics, and sovereign debt.
+My name is Raymond He, and I will be on the academic job market in Fall 2026. I am motivated by policy-relevant research questions, and I use modern computational methods and novel data to better understand macroeconomic trends and market outcomes.

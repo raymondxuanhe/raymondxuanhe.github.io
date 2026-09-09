@@ -26,7 +26,7 @@ author:
   name             : "Raymond He"
   pronouns         : # example: "she/her"  
   bio              : ""
-  location         : "Austin, Texas"
+  location         : # "Austin, Texas"
   employer         : "University of Texas at Austin"
   uri              : # URL
   email            : "raymondhe@proton.me" 
@@ -61,7 +61,7 @@ author:
   keybase          : # Username
   instagram        : # Username
   lastfm           : # Username
-  linkedin         : "raymondxuanhe"
+  linkedin         : # "raymondxuanhe"
   mastodon         : # URL
   medium           : # URL
   pinterest        : # Username
@@ -221,12 +221,6 @@ collections:
   teaching:
     output: true
     permalink: /:collection/:path/
-  publications:
-    output: true
-    permalink: /:collection/:path/
-  portfolio:
-    output: true
-    permalink: /:collection/:path/
   talks:
     output: true
     permalink: /:collection/:path/
@@ -261,24 +255,6 @@ defaults:
       author_profile: true
       share: true
       comments: true
-  # _publications
-  - scope:
-      path: ""
-      type: publications
-    values:
-      layout: single
-      author_profile: true
-      share: true
-      comments: true
-  # _portfolio
-  - scope:
-      path: ""
-      type: portfolio
-    values:
-      layout: single
-      author_profile: true
-      share: true
-      comment: true
   # _talks
   - scope:
       path: ""
@@ -332,12 +308,8 @@ whitelist:
 #  - <base_path>/tags/my-awesome-tag/index.html ~> path: /tags/
 #  - <base_path/categories/my-awesome-category/index.html ~> path: /categories/
 #  - <base_path/my-awesome-category/index.html ~> path: /
-category_archive:
-  type: liquid
-  path: /categories/
-tag_archive:
-  type: liquid
-  path: /tags/
+# (category_archive / tag_archive removed: site uses no categories/tags taxonomy,
+#  and the /categories/ and /tags/ archive pages have been deleted)
 # https://github.com/jekyll/jekyll-archives
 # jekyll-archives:
 #   enabled:

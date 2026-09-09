@@ -8,13 +8,13 @@ $dark-gray                  : mix(#000, $gray, 40%);
 $darker-gray                : mix(#000, $gray, 60%);
 $light-gray                 : mix(#fff, $gray, 50%);
 
-$background                 : #474747;
-$background-light           : mix(#fff, $background, 80%);
-$background-lighter         : mix(#fff, $background, 90%);
-$text                       : #ffffff;
-$link                       : #0ea1c5;
+$background                 : #1e1e1e;   /* deep neutral, not mid-gray */
+$background-light           : #2a2a2a;   /* elevated surface */
+$background-lighter         : #333333;   /* more-elevated surface */
+$text                       : #e8e8e8;   /* soft white (less glare than #fff) */
+$link                       : #38bdf0;   /* brighter cyan, readable on dark */
 $link-dark                  : mix(#000, $link, 25%);
-$link-light                 : mix(#fff, $link, 25%);
+$link-light                 : mix(#fff, $link, 25%);  /* lighter, used on hover */
 
 /* Color codes used for the site */
 $danger-color               : #ee5f5b;
@@ -38,17 +38,17 @@ html[data-theme="dark"] {
     --global-base-color                 : #{$background};
     --global-bg-color                   : #{$background};
     --global-footer-bg-color            : #{$background};
-    --global-border-color               : #{$light-gray};
-    --global-dark-border-color          : #{$background-light};
-    --global-code-background-color      : #fafafa;
-    --global-code-text-color            : #{$darker-gray};
-    --global-fig-caption-color          : #{$light-gray};
+    --global-border-color               : #3a3a3a;   /* subtle, was bright #bdc1c4 */
+    --global-dark-border-color          : #454545;
+    --global-code-background-color      : #2a2a2a;   /* dark surface, was near-white */
+    --global-code-text-color            : #e0e0e0;
+    --global-fig-caption-color          : #a0a4a8;
     --global-link-color                 : #{$link};
-    --global-link-color-hover           : #{$link-dark};
+    --global-link-color-hover           : #{$link-light};  /* lighter on hover (was darker) */
     --global-link-color-visited         : #{$link-light};
     --global-masthead-link-color        : #{$text};
-    --global-masthead-link-color-hover  : #{$background-light};
+    --global-masthead-link-color-hover  : #ffffff;   /* brighten on hover */
     --global-text-color                 : #{$text};
-    --global-text-color-light           : #{$light-gray};
+    --global-text-color-light           : #a0a4a8;   /* muted, was bright #bdc1c4 */
     --global-thead-color                : #{$background-lighter};
 }

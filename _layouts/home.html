@@ -1,0 +1,142 @@
+---
+layout: default
+---
+
+{% include base_path %}
+
+<style>
+/* Homepage hero: rectangular photo on the left, name + description on the right.
+   Scoped to this layout only. */
+.home-wrap {
+  max-width: 880px;
+  margin: 0 auto;
+  padding: 2em 1em 0;
+}
+
+.home-hero {
+  display: flex;
+  gap: 2.2em;
+  align-items: flex-start;
+}
+
+/* --- Left: rectangular photo --- */
+.home-photo { flex: 0 0 auto; }
+.home-photo img {
+  display: block;
+  width: 250px;
+  max-width: 38vw;
+  height: auto;
+  border-radius: 12px;
+  border: 1px solid var(--global-border-color);
+  object-fit: cover;
+  padding: 0;
+}
+
+/* --- Right: name, description, links --- */
+.home-hero-text {
+  flex: 1 1 auto;
+  min-width: 0;
+  text-align: left;
+}
+.home-name {
+  margin: 0 0 0.25em;
+  font-size: 2.4em;
+  line-height: 1.1;
+}
+.home-subtitle {
+  margin: 0 0 0.9em;
+  font-size: 1.05em;
+  color: var(--global-text-color-light);
+}
+.home-fields {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5em;
+  list-style: none;
+  margin: 0 0 1.3em;
+  padding: 0;
+}
+.home-fields .home-field {
+  font-size: 0.88em;
+  color: var(--global-text-color-light);
+  border: 1px solid var(--global-border-color);
+  border-radius: 999px;
+  padding: 0.28em 0.95em;
+  white-space: nowrap;
+}
+.home-desc p {
+  text-align: left;
+  margin: 0 0 0.8em;
+}
+.home-desc p:last-child { margin-bottom: 0; }
+
+/* Contact links come from the author-profile include; hide its avatar/name/button,
+   show only the links as a left-aligned inline row. */
+.home-links { margin-top: 1em; }
+.home-links .author__avatar,
+.home-links .author__content,
+.home-links .author__urls-wrapper > button { display: none !important; }
+.home-links .author__urls-wrapper { position: static; }
+.home-links .author__urls {
+  display: flex !important;
+  position: static;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  gap: 0.35em 1.15em;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  box-shadow: none;
+}
+.home-links .author__urls li { white-space: nowrap; font-size: 0.92em; }
+.home-links .author__desktop { display: inline-block !important; }
+.home-links .author__urls a { text-decoration: none; }
+.home-links .author__urls a:hover { text-decoration: underline; }
+
+/* Stack on small screens */
+@media (max-width: 600px) {
+  .home-hero { flex-direction: column; align-items: center; text-align: center; }
+  .home-photo img { width: 220px; max-width: 70vw; }
+  .home-hero-text { text-align: center; }
+  .home-desc p { text-align: left; }
+  .home-fields { justify-content: center; }
+  .home-links .author__urls { justify-content: center; }
+}
+</style>
+
+<div id="main" role="main">
+  <div class="home-wrap">
+    <div class="home-hero" itemscope itemtype="http://schema.org/Person">
+
+      <div class="home-photo">
+        {% if site.author.avatar contains "://" %}
+          <img src="{{ site.author.avatar }}" alt="{{ site.author.name }}" fetchpriority="high" />
+        {% else %}
+          <img src="{{ site.author.avatar | prepend: '/images/' | prepend: base_path }}" alt="{{ site.author.name }}" fetchpriority="high" />
+        {% endif %}
+      </div>
+
+      <div class="home-hero-text">
+        <h1 class="home-name" itemprop="name">{{ site.author.name }}</h1>
+        {% if page.subtitle %}
+          <p class="home-subtitle">{{ page.subtitle }}</p>
+        {% endif %}
+        {% if page.fields %}
+          <ul class="home-fields">
+            {% for field in page.fields %}
+              <li class="home-field">{{ field }}</li>
+            {% endfor %}
+          </ul>
+        {% endif %}
+        <div class="home-desc" itemprop="description">
+          {{ content }}
+        </div>
+        <div class="home-links">
+          {% include author-profile.html %}
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
