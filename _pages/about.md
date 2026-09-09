@@ -15,4 +15,4 @@ redirect_from:
 
 Thank you for visiting my website!
 
-My name is Raymond He, and I will be on the academic job market in Fall 2026. I am motivated by policy-relevant research questions, and I use modern computational methods and novel data to better understand macroeconomic trends and market outcomes.
+My name is Raymond He, and I will be on the academic job market in Fall 2026. I am motivated by policy-relevant research questions, and I use state-of-the-art computational methods and novel data to better understand macroeconomic trends and market outcomes.
