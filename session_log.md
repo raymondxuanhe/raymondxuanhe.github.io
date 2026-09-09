@@ -6,6 +6,43 @@ Each entry records: date, a summary of what was done, and files touched.
 
 ---
 
+## 2026-09-08 — Theme color overhaul (dark + light) & homepage copy
+
+**Summary**
+- **Dark theme rework** (`_sass/theme/_dark.scss`): the old theme was really a mid-gray
+  (`#474747`), not a true dark mode, and had a few issues. Changes:
+  - Background `#474747` → `#1e1e1e` (deep neutral); elevated surfaces `#2a2a2a`/`#333`.
+  - Body text `#fff` → `#e8e8e8` (less glare); muted text/borders split out — muted text
+    `#a0a4a8`, borders `#3a3a3a` (were both the bright `#bdc1c4`).
+  - Link `#0ea1c5` → `#38bdf0` (brighter, AA-contrast). **Fixed a real bug:** link *hover*
+    used to go *darker* (`#0b7994`) on the dark bg; now goes *lighter* (`#6acef4`).
+  - Code blocks were a glaring near-white (`#fafafa`) box in dark mode → dark surface
+    `#2a2a2a` with `#e0e0e0` text. Masthead link hover brightens to `#fff`.
+- **Light theme contrast fixes** (`_sass/theme/_default.scss`):
+  - Link `#52adc8` (~2.2:1, failed AA) → `#2f7f93` (deeper teal, ~4.8:1); hover `#1d5c6b`.
+  - Muted text `#9ba1a6` (~2.6:1) → `#6b7176` (~4.6:1) — affects homepage subtitle, field
+    pills, research coauthor lines, figure captions.
+  - Border `#f2f3f3` (near-invisible; homepage photo border barely showed) → `#e4e6e8`.
+  - Left the soft near-black body text (`#494e52`) as-is.
+  - Accent hue kept in the same teal/cyan family across both modes for consistency.
+- Both changes are global (all pages) and compile via SCSS, so no server restart needed.
+- **Homepage copy** (`_pages/about.md`, iterated a few times, final is Raymond's own
+  wording lightly edited): short research-focused blurb + Fall 2026 job-market line.
+- **Field pills** relabeled to: International Economics, Labor, Sovereign Debt.
+
+**Files touched**
+- `_sass/theme/_dark.scss` (dark palette overhaul)
+- `_sass/theme/_default.scss` (light-mode link/muted-text/border contrast fixes)
+- `_pages/about.md` (`fields` relabeled; about-page blurb rewritten)
+
+**Note**
+- Research-page cards define their own dark hover color (`#525252`) directly in
+  `research.md` rather than via theme variables; against the new `#1e1e1e` dark bg they read
+  as raised gray boxes. Left as-is; can be deepened to match if it looks too bright.
+- Still all uncommitted (working tree only).
+
+---
+
 ## 2026-09-08 — Homepage redesign (centered nav + two-column hero)
 
 **Summary**
