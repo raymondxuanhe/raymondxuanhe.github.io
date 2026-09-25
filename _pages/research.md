@@ -193,8 +193,14 @@ html[data-theme="dark"] .research-list {
 
   <h2 class="section-heading">Works in Progress</h2>
 
-  <div class="paper paper--plain">
+  <div class="paper" tabindex="0">
     <div class="paper-title">Everything In Moderation: The Currency and Maturity Composition of Sovereign Debt</div>
+    <div class="paper-abstract">
+      This paper studies the currency and maturity composition of government debt in emerging market economies. In the data, domestic-currency government debt is often of significantly shorter maturity than foreign-currency debt. I build a dynamic model of sovereign debt with endogenous default, inflation, and a portfolio choice problem with four bonds. Issuing debt that is long-term and/or denominated in domestic currency insures the government against adverse income shocks and currency depreciations, but incentivizes default and inflation in the future, which governments must compensate lenders for today. In typical states of the economy, a debt portfolio with moderate hedging and disciplining properties is optimal, while debt that is both long-term and domestic currency, or short-term and foreign currency is only optimal in extreme states.
+    </div>
+    <div class="paper-controls">
+      <span class="paper-toggle">Abstract</span>
+    </div>
   </div>
 
   <div class="paper paper--plain">
