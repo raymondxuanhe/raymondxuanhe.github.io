@@ -176,6 +176,22 @@ html[data-theme="dark"] .research-list {
   <h2 class="section-heading">Working Papers</h2>
 
   <div class="paper" tabindex="0">
+    <div class="paper-title">Everything In Moderation: The Currency and Maturity Composition of Sovereign Debt</div>
+    <div class="paper-meta">Job Market Paper</div>
+    <div class="paper-abstract">
+      <!-- ABSTRACT:currency-maturity START (auto-synced from abstract.tex by scripts/sync_abstract.py — do not edit by hand) -->
+      Emerging-market governments choose both the currency and maturity of their debt. I document a new fact: domestic-currency sovereign debt has systematically shorter maturity than foreign-currency debt. I develop a dynamic sovereign-debt model with endogenous default and inflation in which the government chooses among short- and long-term bonds denominated in domestic and foreign currency. Domestic-currency and long-term debt provide insurance against bad states but create inflation, default, and dilution incentives that lower their prices today. Foreign-currency and short-term debt provide stronger discipline but less insurance. When currency and maturity are chosen jointly, these forces make the extreme portfolios unattractive in normal states, leading governments to rely primarily on short-term domestic-currency and long-term foreign-currency debt. Calibrated to Türkiye, the model generates a domestic-to-foreign maturity ratio close to that observed in the data and shifts issuance toward short-term foreign-currency debt in adverse states.
+      <!-- ABSTRACT:currency-maturity END -->
+    </div>
+    <div class="paper-controls">
+      <span class="paper-toggle">Abstract</span>
+      <span class="paper-links">
+        <a class="btn-paper" href="/files/research/jmp/raymond_he_JMP_latest_version.pdf">Paper</a>
+      </span>
+    </div>
+  </div>
+
+  <div class="paper" tabindex="0">
     <div class="paper-title">How Much Can I Make? Cross-Firm Pay Transparency's Effects On the US Labor Market</div>
     <div class="paper-meta">with <a href="https://upmanyu-suryansh.github.io">Suryansh Upmanyu</a> &middot; Submitted</div>
     <div class="paper-abstract">
@@ -189,23 +205,6 @@ html[data-theme="dark"] .research-list {
         <a class="btn-paper" href="/files/research/pay_transparency/pay_transparency_latest_version.pdf">Paper</a>
         <a href="/files/research/pay_transparency/pay_transparency_online_appendix.pdf">Online Appendix</a>
         <a href="/files/research/pay_transparency/pay_transparency_slides.pdf">Slides</a>
-      </span>
-    </div>
-  </div>
-
-  <div class="paper" tabindex="0">
-    <div class="paper-title">Everything In Moderation: The Currency and Maturity Composition of Sovereign Debt</div>
-    <div class="paper-meta">Job Market Paper</div>
-    <div class="paper-abstract">
-      <!-- ABSTRACT:currency-maturity START (auto-synced from abstract.tex by scripts/sync_abstract.py — do not edit by hand) -->
-      Emerging-market governments choose both the currency and maturity of their debt. I document a new fact: domestic-currency sovereign debt has systematically shorter maturity than foreign-currency debt. I develop a dynamic sovereign-debt model with endogenous default and inflation in which the government chooses among short- and long-term bonds denominated in domestic and foreign currency. Domestic-currency and long-term debt provide insurance against bad states but create inflation, default, and dilution incentives that lower their prices today. Foreign-currency and short-term debt provide stronger discipline but less insurance. When currency and maturity are chosen jointly, these forces make the extreme portfolios unattractive in normal states, leading governments to rely primarily on short-term domestic-currency and long-term foreign-currency debt. Calibrated to Türkiye, the model generates a domestic-to-foreign maturity ratio close to that observed in the data and shifts issuance toward short-term foreign-currency debt in adverse states.
-      <!-- ABSTRACT:currency-maturity END -->
-    </div>
-    <div class="paper-controls">
-      <span class="paper-toggle">Abstract</span>
-      <span class="paper-links">
-        <a class="btn-paper" href="/files/research/jmp/raymond_he_JMP_latest_version.pdf">Paper</a>
-        <a href="/files/research/jmp/raymond_he_jmp_slides_handout.pdf">Slides</a>
       </span>
     </div>
   </div>
