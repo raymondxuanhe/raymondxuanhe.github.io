@@ -179,7 +179,9 @@ html[data-theme="dark"] .research-list {
     <div class="paper-title">How Much Can I Make? Cross-Firm Pay Transparency's Effects On the US Labor Market</div>
     <div class="paper-meta">with <a href="https://upmanyu-suryansh.github.io">Suryansh Upmanyu</a> &middot; Submitted</div>
     <div class="paper-abstract">
+      <!-- ABSTRACT:pay-transparency START (auto-synced from abstract.tex by scripts/sync_abstract.py — do not edit by hand) -->
       Many major US jurisdictions have implemented pay transparency laws that require firms to advertise wage offers in vacancy postings. Using data on the near universe of job postings and representative survey data in a difference-in-differences framework, we find that these laws increased the fraction of postings with wage information by 24.7 percentage points. This translated to average real wage increases of 3.2%-4.4% in Colorado and 0.6%-1.3% in California and Washington. We further consistently find significant positive effects on real wages for workers who are male, have a college-degree, or are over forty years old.
+      <!-- ABSTRACT:pay-transparency END -->
     </div>
     <div class="paper-controls">
       <span class="paper-toggle">Abstract</span>
@@ -191,17 +193,24 @@ html[data-theme="dark"] .research-list {
     </div>
   </div>
 
-  <h2 class="section-heading">Works in Progress</h2>
-
   <div class="paper" tabindex="0">
     <div class="paper-title">Everything In Moderation: The Currency and Maturity Composition of Sovereign Debt</div>
+    <div class="paper-meta">Job Market Paper</div>
     <div class="paper-abstract">
-      This paper studies the currency and maturity composition of government debt in emerging market economies. In the data, domestic-currency government debt is often of significantly shorter maturity than foreign-currency debt. I build a dynamic model of sovereign debt with endogenous default, inflation, and a portfolio choice problem with four bonds. Issuing debt that is long-term and/or denominated in domestic currency insures the government against adverse income shocks and currency depreciations, but incentivizes default and inflation in the future, which governments must compensate lenders for today. In typical states of the economy, a debt portfolio with moderate hedging and disciplining properties is optimal, while debt that is both long-term and domestic currency, or short-term and foreign currency is only optimal in extreme states.
+      <!-- ABSTRACT:currency-maturity START (auto-synced from abstract.tex by scripts/sync_abstract.py — do not edit by hand) -->
+      Emerging-market governments choose both the currency and maturity of their debt. I document a new fact: domestic-currency sovereign debt has systematically shorter maturity than foreign-currency debt. I develop a dynamic sovereign-debt model with endogenous default and inflation in which the government chooses among short- and long-term bonds denominated in domestic and foreign currency. Domestic-currency and long-term debt provide insurance against bad states but create inflation, default, and dilution incentives that lower their prices today. Foreign-currency and short-term debt provide stronger discipline but less insurance. When currency and maturity are chosen jointly, these forces make the extreme portfolios unattractive in normal states, leading governments to rely primarily on short-term domestic-currency and long-term foreign-currency debt. Calibrated to Türkiye, the model generates a domestic-to-foreign maturity ratio close to that observed in the data and shifts issuance toward short-term foreign-currency debt in adverse states.
+      <!-- ABSTRACT:currency-maturity END -->
     </div>
     <div class="paper-controls">
       <span class="paper-toggle">Abstract</span>
+      <span class="paper-links">
+        <a class="btn-paper" href="/files/research/jmp/raymond_he_JMP_latest_version.pdf">Paper</a>
+        <a href="/files/research/jmp/raymond_he_jmp_slides_handout.pdf">Slides</a>
+      </span>
     </div>
   </div>
+
+  <h2 class="section-heading">Works in Progress</h2>
 
   <div class="paper paper--plain">
     <div class="paper-title">Optimal Portfolio Uniqueness in Sovereign Debt Models</div>
