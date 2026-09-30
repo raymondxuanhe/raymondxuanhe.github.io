@@ -185,9 +185,6 @@ html[data-theme="dark"] .research-list {
     </div>
     <div class="paper-controls">
       <span class="paper-toggle">Abstract</span>
-      <span class="paper-links">
-        <a class="btn-paper" href="/files/research/jmp/raymond_he_JMP_latest_version.pdf">Paper</a>
-      </span>
     </div>
   </div>
 
