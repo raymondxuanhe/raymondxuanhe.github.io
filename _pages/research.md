@@ -213,4 +213,8 @@ html[data-theme="dark"] .research-list {
     <div class="paper-meta">with <a href="https://www.zachstangebye.com">Zachary Stangebye</a></div>
   </div>
 
+  <h2 class="section-heading">Other</h2>
+
+  <p><a href="https://github.com/raymondxuanhe/Arellano_2008_EZ">Solving the Arellano (2008) Model with Epstein-Zin Preferences</a> &mdash; <em>details in GitHub readme</em></p>
+
 </div>
