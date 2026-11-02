@@ -176,7 +176,7 @@ html[data-theme="dark"] .research-list {
   <h2 class="section-heading">Working Papers</h2>
 
   <div class="paper" tabindex="0">
-    <div class="paper-title">Everything In Moderation: The Currency and Maturity Composition of Sovereign Debt</div>
+    <div class="paper-title">Everything in Moderation: The Currency-Maturity Composition of Sovereign Debt</div>
     <div class="paper-meta">Job Market Paper</div>
     <div class="paper-abstract">
       <!-- ABSTRACT:currency-maturity START (auto-synced from abstract.tex by scripts/sync_abstract.py — do not edit by hand) -->
@@ -189,7 +189,7 @@ html[data-theme="dark"] .research-list {
   </div>
 
   <div class="paper" tabindex="0">
-    <div class="paper-title">How Much Can I Make? Cross-Firm Pay Transparency's Effects On the US Labor Market</div>
+    <div class="paper-title">How Much Can I Make? Cross-Firm Pay Transparency's Effects on the US Labor Market</div>
     <div class="paper-meta">with <a href="https://upmanyu-suryansh.github.io">Suryansh Upmanyu</a> &middot; Submitted</div>
     <div class="paper-abstract">
       <!-- ABSTRACT:pay-transparency START (auto-synced from abstract.tex by scripts/sync_abstract.py — do not edit by hand) -->
