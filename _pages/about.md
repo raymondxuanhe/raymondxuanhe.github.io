@@ -14,7 +14,8 @@ redirect_from:
 
 Thank you for visiting my website!
 
-I am motivated by policy-relevant research questions, and I use state-of-the-art computational methods and novel data to better understand macroeconomic trends and 
-market outcomes.
+I am an applied macroeconomist specializing in international economics and labor economics. My research focuses on using 
+state-of-the-art computational methods and novel data to address policy-relevant questions and understand macroeconomic
+trends.
 
-I am on the 2026-2027 job market.
+*I am on the 2026-2027 job market.*
