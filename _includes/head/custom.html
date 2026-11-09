@@ -14,6 +14,23 @@
 <link rel="icon" href="/images/favicon.ico"/>
 <meta name="theme-color" content="#ffffff"/>
 
+<!-- Apply the saved/system theme before first paint. main.min.js is a deferred module, so
+     without this every page paints once in the light theme and then switches to dark.
+     Safari can fail to repaint the sidebar avatar (inside the translate3d-composited
+     .sidebar), leaving a white box around the photo. Mirrors setTheme() in _main.js. -->
+<script>
+  (function () {
+    var root = document.documentElement, t = null;
+    try { t = localStorage.getItem("theme"); } catch (e) {}
+    if (!t) {
+      if (root.getAttribute("data-theme")) return;
+      t = (window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches) ? "dark" : "light";
+    }
+    if (t === "dark") root.setAttribute("data-theme", "dark");
+    else if (t === "light") root.removeAttribute("data-theme");
+  })();
+</script>
+
 <!-- Center the masthead navigation (site title + links + theme toggle) -->
 <style>
   .greedy-nav .visible-links {
