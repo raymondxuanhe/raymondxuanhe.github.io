@@ -23,7 +23,9 @@ RESEARCH_MD = REPO / "_pages" / "research.md"
 
 # marker id  ->  abstract.tex source of truth
 ABSTRACTS = {
-    "currency-maturity": DOCS / "JMP" / "Main" / "abstract.tex",
+    # "currency-maturity" (JMP) is edited by hand in research.md for now (markers removed).
+    # To re-enable: restore the START/END markers there and uncomment this row.
+    # "currency-maturity": DOCS / "JMP" / "Main" / "abstract.tex",
     "pay-transparency": DOCS / "Pay-Transparency" / "Writing" / "Chapters" / "abstract.tex",
 }
 
