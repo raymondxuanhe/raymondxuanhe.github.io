@@ -23,7 +23,7 @@ RESEARCH_MD = REPO / "_pages" / "research.md"
 
 # marker id  ->  abstract.tex source of truth
 ABSTRACTS = {
-    "currency-maturity": DOCS / "Currency-Maturity-Composition" / "7-Writing" / "Main" / "abstract.tex",
+    "currency-maturity": DOCS / "JMP" / "Main" / "abstract.tex",
     "pay-transparency": DOCS / "Pay-Transparency" / "Writing" / "Chapters" / "abstract.tex",
 }
 

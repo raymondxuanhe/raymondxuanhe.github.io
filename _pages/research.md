@@ -180,11 +180,14 @@ html[data-theme="dark"] .research-list {
     <div class="paper-meta">Job Market Paper</div>
     <div class="paper-abstract">
       <!-- ABSTRACT:currency-maturity START (auto-synced from abstract.tex by scripts/sync_abstract.py — do not edit by hand) -->
-      Emerging-market governments choose both the currency and maturity of their debt. I document a new fact: domestic-currency sovereign debt has systematically shorter maturity than foreign-currency debt. I develop a dynamic sovereign-debt model with endogenous default and inflation in which the government chooses among short- and long-term bonds denominated in domestic and foreign currency. Domestic-currency and long-term debt provide insurance against bad states but create inflation, default, and dilution incentives that lower their prices today. Foreign-currency and short-term debt provide stronger discipline but less insurance. When currency and maturity are chosen jointly, these forces make the extreme portfolios unattractive in normal states, leading governments to rely primarily on short-term domestic-currency and long-term foreign-currency debt. Calibrated to Türkiye, the model generates a domestic-to-foreign maturity ratio close to that observed in the data and shifts issuance toward short-term foreign-currency debt in adverse states.
+      Emerging-market governments choose both the currency and maturity of their debt. I document a new fact: domestic currency sovereign debt has systematically shorter maturity than foreign currency debt. I develop a dynamic sovereign-debt model with endogenous default and inflation in which the government chooses among short- and long-term bonds denominated in domestic and foreign currency. Domestic currency and long-term debt provide insurance against bad states but create inflation, default, and dilution incentives that lower their prices today. Foreign currency and short-term debt provide stronger discipline but less insurance. When currency and maturity are chosen jointly, these forces make the extreme portfolios unattractive in normal states, leading governments to rely primarily on short-term domestic currency and long-term foreign currency debt. Calibrated to Türkiye, the model generates a domestic-to-foreign maturity ratio close to that observed in the data and shifts issuance toward short-term foreign currency debt in adverse states.
       <!-- ABSTRACT:currency-maturity END -->
     </div>
     <div class="paper-controls">
       <span class="paper-toggle">Abstract</span>
+      <span class="paper-links">
+        <a class="btn-paper" href="/files/research/jmp/raymond_he_JMP_latest_version.pdf">Paper</a>
+      </span>
     </div>
   </div>
 
@@ -208,9 +211,15 @@ html[data-theme="dark"] .research-list {
 
   <h2 class="section-heading">Works in Progress</h2>
 
-  <div class="paper paper--plain">
+  <div class="paper" tabindex="0">
     <div class="paper-title">Optimal Portfolio Uniqueness in Sovereign Debt Models</div>
     <div class="paper-meta">with <a href="https://www.zachstangebye.com">Zachary Stangebye</a></div>
+    <div class="paper-abstract">
+      This paper examines how risk-sensitive preferences shape maturity choice in a model of sovereign default. We find that increasing risk aversion above common values assumed in the literature has two crucial benefits. First, it allows models to endogenously generate portfolio choices that are in close agreement with emerging-market data without additional preference terms. Second, we show that when combined with a sophisticated functional approximation technique that can accommodate the irregular domain of policy functions, these preferences yield more accurate approximations than standard approaches.
+    </div>
+    <div class="paper-controls">
+      <span class="paper-toggle">Abstract</span>
+    </div>
   </div>
 
   <h2 class="section-heading">Other</h2>

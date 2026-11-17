@@ -18,4 +18,4 @@ I am an applied macroeconomist specializing in international economics and labor
 state-of-the-art computational methods and novel data to address policy-relevant questions and understand macroeconomic
 trends.
 
-*I am on the 2026-2027 job market.*
+**I am on the 2026-2027 job market.**
