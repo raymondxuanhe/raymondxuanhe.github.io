@@ -18,4 +18,6 @@ I am an applied macroeconomist specializing in international economics and labor
 state-of-the-art computational methods and novel data to address policy-relevant questions and understand macroeconomic
 trends.
 
+My job-market paper can be accessed [here](/files/research/jmp/raymond_he_JMP_latest_version.pdf).
+
 **I am on the 2026-2027 job market.**
